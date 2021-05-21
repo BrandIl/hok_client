@@ -1,24 +1,25 @@
-import * as React from 'react';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import {
-    Edit,
-    EditProps,
+    Create,
+    CreateProps,
     SimpleForm,
     TextInput,
     required,
     email,
-    TopToolbar,
-    Button,
-    ShowButton,
+    useRefresh,
+    useNotify,
+    useRedirect,
+    TabbedForm,
+    TabbedFormTabs,
+    FormTab,
 } from 'react-admin';
-import { AnyObject } from 'react-final-form';
 import { Typography, Box } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from '@material-ui/styles/withStyles';
 
 
 
-export const OrganizationEdit: FC<EditProps> = props => {
+export const OrganizationCreate: FC<CreateProps> = props => {
     const styles: Styles<Theme, any> = {
         right: { display: 'inline-block', direction: 'rtl',margin: 32},
         center: { display: 'inline-block',  direction: 'rtl',margin: 32},
@@ -36,9 +37,26 @@ export const OrganizationEdit: FC<EditProps> = props => {
         </Typography>
     );
    };
+   const notify = useNotify();
+   const refresh = useRefresh();
+   const redirect = useRedirect();
+
+   const onSuccess = () => {
+       notify(`המוסד נוסף בהצלחה!`)
+       redirect('/organizations');
+       refresh();
+      
+   };
+   const onFailure = () => {
+    // refresh();
+     notify(`שגיאה`)
+   //  redirect('/posts');
+    
+ };
     return (
-        <Edit title="עדכון ארגון"  {...props}>
-            <SimpleForm>
+        <Create title="הוספת מוסד" onSuccess={onSuccess}  onFailure={onFailure} {...props}>
+            <TabbedForm>
+               <FormTab  label="פרטי לקוח">
                 <SectionTitle label="שם הארגון" />
                 <TextInput  
                     autoFocus
@@ -47,18 +65,17 @@ export const OrganizationEdit: FC<EditProps> = props => {
                     formClassName={classes.center}
                     validate={requiredValidate}
                 />
-                 <SectionTitle label="כתובת" />
+                </FormTab>
+                <FormTab label="כתובת" >
                 <TextInput
                     source="communication.address.city.name"
                     label="עיר"
                     formClassName={classes.right}
-                    validate={requiredValidate}
                 />
                <TextInput
                     source="communication.address.city.zip"
                     label="מיקוד"
                     formClassName={classes.left}
-                    validate={requiredValidate}
                 />
                 <Separator/>
 
@@ -66,18 +83,17 @@ export const OrganizationEdit: FC<EditProps> = props => {
                     source="communication.address.street.name"
                     label="רחוב"
                     formClassName={classes.right}
-                    validate={requiredValidate}
                 />
                 <TextInput
                     source="communication.address.street.number"
                     label="מספר"
                     formClassName={classes.left}
-                    validate={requiredValidate}
                 />
-                 <SectionTitle label="יצירת קשר" />
+                </FormTab>
+                <FormTab label="יצירת קשר" >
                  <TextInput
                     type="email"
-                    source="communication.email"
+                    source="communication.concat.email"
                     label="מייל"
                     formClassName={classes.center}
                     validation={{ email: true }}
@@ -85,79 +101,67 @@ export const OrganizationEdit: FC<EditProps> = props => {
                 />
 
                <TextInput
-                    source="communication.phone"
+                    source="communication.concat.phone"
                     label="טלפון"
                     formClassName={classes.center}
-                    validate={requiredValidate}
                 />
-                 <SectionTitle label='פרטי מס"ב' />
-                 <SectionTitle label="אשראי" />
+                </FormTab>
+                <FormTab label='פרטי מס"ב'>
+                 <SectionTitle label="זיכויים" />
                  <TextInput
                     source="masavData.credit.codeNosse"
                     label="creditNosse"
                     formClassName={classes.right}
-                     validate={requiredValidate}
                 />
                  <TextInput
                     source="masavData.credit.senderCode"
                     label="senderCode"
                     formClassName={classes.left}
-                     validate={requiredValidate}
                 />
-              <SectionTitle label="charge" />
+              <SectionTitle label="חיובים" />
               <TextInput
                     source="masavData.charge.codeNosse"
                     label="creditNosse"
                     formClassName={classes.right}
-                     validate={requiredValidate}
                 />
                  <TextInput
                     source="masavData.charge.senderCode"
                     label="senderCode"
                     formClassName={classes.left}
-                     validate={requiredValidate}
                 />
 
                 <Separator />
-     
-                 <SectionTitle label="שיטת תשלום" />
+                </FormTab>
+                <FormTab  label="שיטת תשלום">
                  <TextInput
                     source="paymentAgreement.minPrice"
                     label="מחיר מינימום"
                     formClassName={classes.right}
-                     validate={requiredValidate}
                 />
                      <TextInput
                     source="paymentAgreement.feePerUnit"
                     label="תשלום ליחידה"
                     formClassName={classes.center}
-                     validate={requiredValidate}
                 />
-                     <TextInput
-                    source="paymentAgreement.dayOfCharge"
-                    label="יום גביה"
-                    formClassName={classes.left}
-                     validate={requiredValidate}
-                />
+
                   <Separator />
+                  </FormTab>
+                  <FormTab label="חשבון בנק">
                   <SectionTitle label="חשבון בנק" />
                      <TextInput
                     source="paymentAgreement.paymentMethod.bankAccount.bankId"
                     label="בנק"
                     formClassName={classes.right}
-                     validate={requiredValidate}
                 />
                          <TextInput
                     source="paymentAgreement.paymentMethod.bankAccount.branchId"
                     label="סניף"
                     formClassName={classes.center}
-                     validate={requiredValidate}
                 />
                          <TextInput
                     source="paymentAgreement.paymentMethod.bankAccount.accountNumber"
                     label="מספר חשבון"
                     formClassName={classes.left}
-                     validate={requiredValidate}
                 />
                 <Separator />
                 <SectionTitle label="כרטיס אשראי" />
@@ -165,21 +169,21 @@ export const OrganizationEdit: FC<EditProps> = props => {
                     source="paymentAgreement.paymentMethod.CreditCard.creditNumber"
                     label="מספר אשראי"
                     formClassName={classes.right}
-                     validate={requiredValidate}
                 />
                          <TextInput
                     source="paymentAgreement.paymentMethod.CreditCard.expiringDate"
                     label="תוקף"
                     formClassName={classes.center}
-                     validate={requiredValidate}
                 />
                          <TextInput
                     source="paymentAgreement.paymentMethod.CreditCard.cvv2"
                     label="cvv"
                     formClassName={classes.left}
-                     validate={requiredValidate}
                 />
-            </SimpleForm>
-        </Edit>
+                </FormTab>
+            </TabbedForm>
+        </Create>
     );
 };
+
+
