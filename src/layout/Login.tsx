@@ -1,23 +1,23 @@
-import * as React from 'react';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Field, withTypes } from 'react-final-form';
-import { useLocation } from 'react-router-dom';
-
 import {
     Avatar,
     Button,
     Card,
     CardActions,
     CircularProgress,
-    TextField,
+    TextField
 } from '@material-ui/core';
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
 import LockIcon from '@material-ui/icons/Lock';
-import { Notification, useTranslate, useLogin, useNotify } from 'react-admin';
-
+import { ThemeProvider } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useState } from 'react';
+import { Notification, useLogin, useNotify, useTranslate } from 'react-admin';
+import { Field, withTypes } from 'react-final-form';
+import { useLocation } from 'react-router-dom';
 import { lightTheme } from './themes';
+
+
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -74,7 +74,7 @@ const renderInput = ({
 );
 
 interface FormValues {
-    username?: string;
+    email?: string;
     password?: string;
 }
 
@@ -97,16 +97,16 @@ const Login = () => {
                     typeof error === 'string'
                         ? error
                         : typeof error === 'undefined' || !error.message
-                        ? 'ra.auth.sign_in_error'
-                        : error.message,
+                            ? 'ra.auth.sign_in_error'
+                            : error.message,
                     'warning',
                     {
                         _:
                             typeof error === 'string'
                                 ? error
                                 : error && error.message
-                                ? error.message
-                                : undefined,
+                                    ? error.message
+                                    : undefined,
                     }
                 );
             }
@@ -115,8 +115,8 @@ const Login = () => {
 
     const validate = (values: FormValues) => {
         const errors: FormValues = {};
-        if (!values.username) {
-            errors.username = translate('ra.validation.required');
+        if (!values.email) {
+            errors.email = translate('ra.validation.required');
         }
         if (!values.password) {
             errors.password = translate('ra.validation.required');
@@ -129,7 +129,7 @@ const Login = () => {
             onSubmit={handleSubmit}
             validate={validate}
             render={({ handleSubmit }) => (
-                <form onSubmit={handleSubmit} noValidate>
+                <form onSubmit={handleSubmit} >
                     <div className={classes.main}>
                         <Card className={classes.card}>
                             <div className={classes.avatar}>
@@ -137,14 +137,12 @@ const Login = () => {
                                     <LockIcon />
                                 </Avatar>
                             </div>
-                            <div className={classes.hint}>
-                                Hint: demo / demo
-                            </div>
+
                             <div className={classes.form}>
                                 <div className={classes.input}>
                                     <Field
                                         autoFocus
-                                        name="username"
+                                        name="email"
                                         // @ts-ignore
                                         component={renderInput}
                                         label={translate('ra.auth.username')}

@@ -1,42 +1,116 @@
-import { List, Datagrid, TextField, EditButton, ListProps, useQuery, Link, Identifier, NumberField, ReferenceField, CloneButton, RecordContext } from "react-admin"
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
-import { FC } from "react";
-import React from "react";
+import { Drawer, Theme, useMediaQuery } from '@material-ui/core';
+import classnames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { FC, Fragment, useCallback } from "react";
+import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
+import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
+import { ProgramEdit } from './ProgramEdit';
+import ProgramLListDesktop from './ProgramListDesktop';
+import ProgramFilter from './ProgramFilter';
+import { exporter } from './ProgramExporter';
+
+const ProgramsBulkActionButtons = (props: BulkActionProps) => (
+    <Fragment>
+        <BulkDeleteButton {...props} />
+    </Fragment>
+);
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    list: {
+        flexGrow: 1,
+        transition: theme.transitions.create(['all'], {
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: 0,
+    },
+    listWithDrawer: {
+        marginLeft: 600,
+    },
+    drawerPaper: {
+        zIndex: 100,
+        width: 600
+    },
+}));
 
 
-export const ProgramList:FC<ListProps> = ({...props}) =>  {
+export const ProgramList: FC<ListProps> = props => {
+    const classes = useStyles();
+    const isXSmall = useMediaQuery<Theme>(theme =>
+        theme.breakpoints.down('xs')
+    );
+    const history = useHistory();
 
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
-    const classes = useStyles(props);
+    const handleClose = useCallback(() => {
+        history.push('/programs');
+    }, [history]);
 
-    return(
-    <List {...props}>
-        <Datagrid  rowClick="edit" >    
-            <TextField label="מוסד" source="organizationId.name"/>
-            <TextField label="שם פרטי" source="customerId.lastName"/>
-            <TextField label="שם משפחה" source="customerId.firstName"/>
-            <TextField label="פרויקט" source="projectId.name"/>
-            <TextField label="סכום לגביה"  source="sum" />
-            <TextField label="תאריך התחלה"  source="startDate" />
-            <TextField label="מספר תשלומים"  source="numOfPayments" />
-            <TextField label="יום גביה"  source="launchDay" />
-            <TextField label="בנק"  source="paymentMethod.bankAccount.bankId" />
-            <TextField label="סניף"  source="paymentMethod.bankAccount.branchId" />
-            <TextField label="מספר חשבון"  source="paymentMethod.bankAccount.accountNumber" />
-            <TextField label="מספר כרטיס"  source="paymentMethod.CreditCard.creditNumber" />
-            <TextField label="תוקף"  source="paymentMethod.CreditCard.expiringDate" />
-            <NumberField label="CVV"  source="paymentMethod.CreditCard.cvv2" />
-            <EditButton  />
-        </Datagrid>
-    </List>
+
+    return (
+        <div className={classes.root}>
+            <Route path="/programs/:id">
+                {({ match }: RouteChildrenProps<{ id: string }>) => {
+                    const isMatch = !!(
+                        match &&
+                        match.params
+                        && match.params.id !== 'create'
+                    );
+
+                    return (
+                        <Fragment>
+                            <List
+                                {...props}
+                                className={classnames(classes.list, {
+                                    [classes.listWithDrawer]: isMatch,
+                                })}
+                                exporter={exporter}
+                                bulkActionButtons={<ProgramsBulkActionButtons />}
+                                filters={<ProgramFilter />}
+                                perPage={5}
+                                sort={{ field: 'name', order: 'DESC' }}
+                            >
+                                {isXSmall ? (
+                                    <ProgramLListDesktop />
+                                ) : (
+                                    <ProgramLListDesktop
+                                        selectedRow={
+                                            isMatch
+                                                ? parseInt(
+                                                    (match as any).params.id,
+                                                    10
+                                                ) : undefined
+                                        }
+                                    />
+                                )}
+                            </List>
+                            <Drawer
+                                variant="persistent"
+                                open={isMatch}
+                                anchor="left"
+                                onClose={handleClose}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
+                                {isMatch ? (
+                                    <ProgramEdit
+                                        id={(match as any).params.id}
+                                        onCancel={handleClose}
+                                        {...props}
+                                    />
+                                ) : null}
+                            </Drawer>
+                        </Fragment>
+                    );
+                }}
+            </Route>
+        </div>
+
     );
 };
+
 
 

@@ -1,153 +1,119 @@
 import React, { FC } from 'react';
 import {
-    Edit,
-    EditProps,
+    Create, CreateProps,
     SimpleForm,
     TextInput,
-    required,
-    email,
-    TopToolbar,
-    Button,
-    ShowButton,
-    Create,
-    ReferenceInput,
-    SelectInput,
-    useNotify,
-    useRedirect,
-    useRefresh,
-    FormTab,
-    TabbedForm,
+    useTranslate
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
+import { CustomerInput } from '../customers/CustomerInput';
+import { OrganizationInput } from '../organizations/OrganizationInput';
+import { ProjectInput } from '../projects/ProjectInput';
+import SectionTitle from '../utils/SectionTitle';
+import { useStyles } from '../utils/styles';
+import { expiringDate, validateDigits, validatePrice } from '../utils/validations';
+import { ProgramCreateActions } from './ProgramCreateActions';
 
-export const ProgramCreate: FC<EditProps> = props => {
-   
 
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
+
+export const ProgramCreate: FC<CreateProps> = props => {
     const classes = useStyles(props);
-    const requiredValidate = [required()];
-    const Separator = () => <Box pt="1em" />;
-    const notify = useNotify();
-    const refresh = useRefresh();
-    const redirect = useRedirect();
-    const onSuccess = () => {
-       
-        notify(`התכנית נוספה בהצלחה!`);
-        redirect('/programs');
-        refresh();
-    };
-    const onFailure = () => {
-       
-        notify(`ארעה שגיאה!`);
-    };
-    const SectionTitle = ({ label }: { label: string }) => {
+    const translate = useTranslate();
+
     return (
-        <Typography variant="h6" gutterBottom>
-            {label}
-        </Typography>
-    );
+        <Create
+            actions={<ProgramCreateActions />}
+            {...props}
+        >
+            <SimpleForm>
+                <SectionTitle
+                    label={translate("resources.programs.fieldGroups.customer_details")}
+                />
+                <>
+                    <OrganizationInput />
+                    <ProjectInput />
+                    <CustomerInput />
+                </>
 
-   };
-    return (
-        <Create title="הוספת תכנית" onSuccess={onSuccess}  onFailure={onFailure} {...props}>
-
-            <TabbedForm>
-                <FormTab  label="פרטי לקוח">
-            <ReferenceInput label="לקוח" source="customerId" reference="customers">
-                <SelectInput optionText="lastName" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-
-              <ReferenceInput label="פרויקט" source="projectId" reference="projects">
-                <SelectInput optionText="name" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-           
-             <ReferenceInput label="ארגון" source="organizationId" reference="organizations">
-                <SelectInput optionText="name" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-            </FormTab>
-            <FormTab label="פרטי תכנית"  path="details"
-                contentClassName={classes.tab}
-            >
-                  <SectionTitle label="פרטי תכנית" />
+                <SectionTitle
+                    label={translate("resources.programs.fieldGroups.collection_details")}
+                />
                 <TextInput
                     source="sum"
-                    label="סכום לגביה"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    validate={validatePrice}
                 />
-               <TextInput
+                <TextInput
                     source="startDate"
-                    label="תאריך התחלה"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    type="month"
+                    defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
                 />
-                <Separator/>
-
+                <TextInput
+                    source="endDate"
+                    formClassName={classes.formInput}
+                    type="month"
+                    defaultValue={`${new Date().getFullYear() + 1}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
+                />
+                <SectionTitle
+                    label=""
+                />
                 <TextInput
                     source="numOfPayments"
-                    label="מספר תשלומים"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    validate={validateDigits(1, 3)}
                 />
+
                 <TextInput
                     source="launchDay"
-                    label="יום גביה"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    type="year"
+                    validate={validateDigits(1, 2)}
                 />
-            </FormTab>
 
-            <FormTab  label="שיטת תשלום" path="reviews">
-                  <SectionTitle label="חשבון בנק" />
-                     <TextInput
+
+                <SectionTitle
+                    label={translate("resources.programs.fieldGroups.bank_account")}
+                />
+
+                <TextInput
                     source="paymentMethod.bankAccount.bankId"
-                    label="בנק"
-                    formClassName={classes.right}
-                     validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    validate={validateDigits(2, 2)}
                 />
-                         <TextInput
+                <TextInput
                     source="paymentMethod.bankAccount.branchId"
-                    label="סניף"
-                    formClassName={classes.center}
-                     validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    validate={validateDigits(3, 3)}
                 />
-                         <TextInput
+                <TextInput
                     source="paymentMethod.bankAccount.accountNumber"
-                    label="מספר חשבון"
-                    formClassName={classes.left}
-                     validate={requiredValidate}
+                    formClassName={classes.formInput}
+                    validate={validateDigits(6, 6)}
                 />
-                <Separator />
-                <SectionTitle label="כרטיס אשראי" />
-                     <TextInput
-                    source="paymentMethod.CreditCard.creditNumber"
-                    label="מספר אשראי"
-                    formClassName={classes.right}
-                     validate={requiredValidate}
+
+                <SectionTitle
+                    label={translate("resources.programs.fieldGroups.credit_card")}
                 />
-                         <TextInput
-                    source="paymentMethod.CreditCard.expiringDate"
-                    label="תוקף"
-                    formClassName={classes.center}
-                     validate={requiredValidate}
+                <TextInput
+                    source="paymentMethod.creditCard.creditNumber"
+                    formClassName={classes.formInput}
+                    validate={validateDigits(8, 16)}
                 />
-                         <TextInput
-                    source="paymentMethod.CreditCard.cvv2"
-                    label="cvv"
-                    formClassName={classes.left}
-                     validate={requiredValidate}
+                <TextInput
+                    source="paymentMethod.creditCard.expiringDate"
+                    formClassName={classes.formInput}
+                    type="month"
+                    defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
+                    validate={expiringDate}
                 />
-            </FormTab>
-        </TabbedForm> 
-        </Create>
+                <TextInput
+                    source="paymentMethod.creditCard.cvv2"
+                    formClassName={classes.formInput}
+                    validate={validateDigits(3, 3)}
+                />
+
+            </SimpleForm>
+        </Create >
     );
 };
 

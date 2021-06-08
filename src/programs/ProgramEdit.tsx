@@ -1,146 +1,171 @@
+import { IconButton, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
-    Edit,
-    EditProps,
-    SimpleForm,
-    TextInput,
-    required,
-    email,
-    TopToolbar,
-    Button,
-    ShowButton,
-    ReferenceField,
-    ReferenceInput,
-    SelectInput,
-    TextField,
-    Datagrid,
-    DateField,
-    EditButton,
-    FormTab,
-    NumberInput,
-    Pagination,
-    ReferenceManyField,
-    TabbedForm,
+    EditContextProvider, EditProps,
+    FormTab, required, SimpleForm, TabbedForm, TextInput,
+    useEditController, useTranslate
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
+import { CustomerInput } from '../customers/CustomerInput';
+import { OrganizationInput } from '../organizations/OrganizationInput';
+import { ProjectInput } from '../projects/ProjectInput';
+import ProjectReferenceField from '../projects/ProjectReferenceField';
+import SectionTitle from '../utils/SectionTitle';
+import { Organization } from '../utils/types';
+import { expiringDate, validateDigits, validateEmail, validateNames, validatePrice } from '../utils/validations';
 
-export const ProgramEdit: FC<EditProps> = props => {
-   
 
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
+const useStyles = makeStyles(theme => ({
+    root: {
+        paddingTop: 40,
+    },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: '1em',
+    },
+    form: {
+        [theme.breakpoints.up('xs')]: {
+            width: 600,
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: '100vw',
+            marginTop: -30,
+        },
+    },
+    inlineField: {
+        display: 'inline-block',
+        marginInlineEnd: 20,
+    },
+}));
+
+interface Props extends EditProps {
+    onCancel: () => void;
+}
+
+
+export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
     const classes = useStyles(props);
-    const requiredValidate = [required()];
-    const Separator = () => <Box pt="1em" />;
-    const SectionTitle = ({ label }: { label: string }) => {
+    const controllerProps = useEditController<Organization>(props);
+    const translate = useTranslate();
+
+    if (!controllerProps.record) {
+        return null;
+    }
     return (
-        <Typography variant="h6" gutterBottom>
-            {label}
-        </Typography>
-    );
-   };
-    return (
-        <Edit {...props} >
-        <TabbedForm>
-            <FormTab
-                label="מוסד"
-                contentClassName={classes.tab}
-            >
-            <ReferenceInput label="לקוח" source="customerId" reference="customers">
-                <SelectInput optionText="lastName" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
+        <div className={classes.root}>
+            <div className={classes.title}>
+                <Typography variant="h6">
+                    {translate('resources.organizations.details')}
+                </Typography>
+                <IconButton onClick={onCancel}>
+                    <CloseIcon />
+                </IconButton>
+            </div>
+            <EditContextProvider value={controllerProps}>
+                <SimpleForm
+                    className={classes.form}
+                    basePath={controllerProps.basePath}
+                    record={controllerProps.record}
+                    save={controllerProps.save}
+                    version={controllerProps.version}
+                    redirect="list"
+                    resource="programs"
+                >
+                    <ProjectReferenceField />
+                    <SectionTitle
+                        label={translate("resources.programs.fieldGroups.customer_details")}
+                    />
+                    <>
+                        <OrganizationInput />
+                        <ProjectInput />
+                        <CustomerInput />
+                    </>
 
-              <ReferenceInput label="פרויקט" source="projectId" reference="projects">
-                <SelectInput optionText="name" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-           
-             <ReferenceInput label="ארגון" source="organizationId" reference="organizations">
-                <SelectInput optionText="name" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-            </FormTab>
-            <FormTab label="פרטי תכנית"  path="details"
-                contentClassName={classes.tab}
-            >
-                  <SectionTitle label="פרטי תכנית" />
-                <TextInput
-                    source="sum"
-                    label="סכום לגביה"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
-                />
-               <TextInput
-                    source="startDate"
-                    label="תאריך התחלה"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
-                />
-                <Separator/>
+                    <SectionTitle
+                        label={translate("resources.programs.fieldGroups.collection_details")}
+                    />
+                    <TextInput
+                        source="sum"
+                        formClassName={classes.inlineField}
+                        validate={validatePrice}
+                    />
+                    <TextInput
+                        source="startDate"
+                        formClassName={classes.inlineField}
+                        type="month"
+                        defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
+                    />
+                    <TextInput
+                        source="endDate"
+                        formClassName={classes.inlineField}
+                        type="month"
+                        defaultValue={`${new Date().getFullYear() + 1}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
+                    />
+                    <SectionTitle
+                        label=""
+                    />
+                    <TextInput
+                        source="numOfPayments"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(1, 3)}
+                    />
 
-                <TextInput
-                    source="numOfPayments"
-                    label="מספר תשלומים"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
-                />
-                <TextInput
-                    source="launchDay"
-                    label="יום גביה"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
-                />
-            </FormTab>
+                    <TextInput
+                        source="launchDay"
+                        formClassName={classes.inlineField}
+                        type="year"
+                        validate={validateDigits(1, 2)}
+                    />
 
-            <FormTab  label="שיטת תשלום" path="reviews">
-                  <SectionTitle label="חשבון בנק" />
-                     <TextInput
-                    source="paymentMethod.bankAccount.bankId"
-                    label="בנק"
-                    formClassName={classes.right}
-                     validate={requiredValidate}
-                />
-                         <TextInput
-                    source="paymentMethod.bankAccount.branchId"
-                    label="סניף"
-                    formClassName={classes.center}
-                     validate={requiredValidate}
-                />
-                         <TextInput
-                    source="paymentMethod.bankAccount.accountNumber"
-                    label="מספר חשבון"
-                    formClassName={classes.left}
-                     validate={requiredValidate}
-                />
-                <Separator />
-                <SectionTitle label="כרטיס אשראי" />
-                     <TextInput
-                    source="paymentMethod.CreditCard.creditNumber"
-                    label="מספר אשראי"
-                    formClassName={classes.right}
-                     validate={requiredValidate}
-                />
-                         <TextInput
-                    source="paymentMethod.CreditCard.expiringDate"
-                    label="תוקף"
-                    formClassName={classes.center}
-                     validate={requiredValidate}
-                />
-                         <TextInput
-                    source="paymentMethod.CreditCard.cvv2"
-                    label="cvv"
-                    formClassName={classes.left}
-                     validate={requiredValidate}
-                />
-            </FormTab>
-        </TabbedForm> 
 
-        </Edit>
+                    <SectionTitle
+                        label={translate("resources.programs.fieldGroups.bank_account")}
+                    />
+
+                    <TextInput
+                        source="paymentMethod.bankAccount.bankId"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(2, 2)}
+                    />
+                    <TextInput
+                        source="paymentMethod.bankAccount.branchId"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(3, 3)}
+                    />
+                    <TextInput
+                        source="paymentMethod.bankAccount.accountNumber"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(6, 6)}
+                    />
+
+                    <SectionTitle
+                        label={translate("resources.programs.fieldGroups.credit_card")}
+                    />
+                    <TextInput
+                        source="paymentMethod.creditCard.creditNumber"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(8, 16)}
+                    />
+                    <TextInput
+                        source="paymentMethod.creditCard.expiringDate"
+                        formClassName={classes.inlineField}
+                        type="month"
+                        defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
+                        validate={expiringDate}
+                    />
+                    <TextInput
+                        source="paymentMethod.creditCard.cvv2"
+                        formClassName={classes.inlineField}
+                        validate={validateDigits(3, 3)}
+                    />
+
+                </SimpleForm>
+            </EditContextProvider>
+        </div >
     );
 };
+
 

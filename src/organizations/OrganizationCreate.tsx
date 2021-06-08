@@ -2,188 +2,167 @@ import React, { FC } from 'react';
 import {
     Create,
     CreateProps,
-    SimpleForm,
-    TextInput,
-    required,
-    email,
-    useRefresh,
-    useNotify,
-    useRedirect,
-    TabbedForm,
-    TabbedFormTabs,
-    FormTab,
+    FormTab, TabbedForm, TextInput,
+
+    useTranslate
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
+import SectionTitle from '../utils/SectionTitle';
+import { useStyles } from '../utils/styles';
+import { validateDigits, validateEmail, validateNames, validatePrice } from '../utils/validations';
+import { OrganizationCreateActions } from './OrganizationCreateActions';
 
 
 
 export const OrganizationCreate: FC<CreateProps> = props => {
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
+    const translate = useTranslate();
     const classes = useStyles(props);
-    const requiredValidate = [required()];
-    const Separator = () => <Box pt="1em" />;
-    const SectionTitle = ({ label }: { label: string }) => {
+
     return (
-        <Typography variant="h6" gutterBottom>
-            {label}
-        </Typography>
-    );
-   };
-   const notify = useNotify();
-   const refresh = useRefresh();
-   const redirect = useRedirect();
+        <Create
+            actions={<OrganizationCreateActions />}
+            {...props}>
+            <TabbedForm >
+                <FormTab label={translate('resources.organizations.titles.organization_details')}>
 
-   const onSuccess = () => {
-       notify(`המוסד נוסף בהצלחה!`)
-       redirect('/organizations');
-       refresh();
-      
-   };
-   const onFailure = () => {
-    // refresh();
-     notify(`שגיאה`)
-   //  redirect('/posts');
-    
- };
-    return (
-        <Create title="הוספת מוסד" onSuccess={onSuccess}  onFailure={onFailure} {...props}>
-            <TabbedForm>
-               <FormTab  label="פרטי לקוח">
-                <SectionTitle label="שם הארגון" />
-                <TextInput  
-                    autoFocus
-                    source="name"
-                    label="שם הארגון"
-                    formClassName={classes.center}
-                    validate={requiredValidate}
-                />
+                    <SectionTitle label={translate('resources.organizations.titles.organization_name')} />
+                    <TextInput
+                        autoFocus
+                        source="name"
+                        formClassName={classes.formInput}
+                        validate={validateNames(2, 30)}
+                    />
+                    <SectionTitle label={translate('resources.organizations.titles.address')} />
+
+                    <TextInput
+                        source="communication.address.city.name"
+                        formClassName={classes.formInput}
+                        validate={validateNames(2, 30)}
+
+                    />
+                    <TextInput
+                        source="communication.address.city.zip"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(5, 8)}
+                    />
+
+                    <TextInput
+                        source="communication.address.street.name"
+                        formClassName={classes.formInput}
+                        validate={validateNames(2, 30)}
+                    />
+                    <TextInput
+                        source="communication.address.street.number"
+                        formClassName={classes.formInput}
+                        validate={validateNames(1, 6)}
+                    />
+                    <SectionTitle label={translate('resources.organizations.titles.details')} />
+
+                    <TextInput
+                        source="communication.concats.name"
+                        formClassName={classes.formInput}
+                        validate={validateNames(2, 30)}
+                    />
+                    <TextInput
+                        type="email"
+                        source="communication.concats.email"
+                        formClassName={classes.formInput}
+                        validation={{ email: true }}
+                        validate={validateEmail}
+                    />
+
+                    <TextInput
+                        source="communication.concats.celular"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(9, 10)}
+                    />
+                    <TextInput
+                        source="communication.concats.remarks"
+                        formClassName={classes.formInput}
+                    />
                 </FormTab>
-                <FormTab label="כתובת" >
-                <TextInput
-                    source="communication.address.city.name"
-                    label="עיר"
-                    formClassName={classes.right}
-                />
-               <TextInput
-                    source="communication.address.city.zip"
-                    label="מיקוד"
-                    formClassName={classes.left}
-                />
-                <Separator/>
+                <FormTab label={translate('resources.organizations.titles.masav_details')}>
+                    <SectionTitle label={translate('resources.organizations.titles.credits')} />
 
-                <TextInput
-                    source="communication.address.street.name"
-                    label="רחוב"
-                    formClassName={classes.right}
-                />
-                <TextInput
-                    source="communication.address.street.number"
-                    label="מספר"
-                    formClassName={classes.left}
-                />
+                    <TextInput
+                        source="masavData.credit.codeNosse"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(8, 8)}
+                    />
+                    <TextInput
+                        source="masavData.credit.senderCode"
+                        formClassName={classes.formInput}
+                        defaultValue="00197"
+                        validate={validateDigits(5, 5)}
+                    />
+                    <SectionTitle label={translate('resources.organizations.titles.charges')} />
+
+
+                    <TextInput
+                        source="masavData.charge.codeNosse"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(8, 8)}
+                    />
+                    <TextInput
+                        source="masavData.charge.senderCode"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(5, 5)}
+                    />
+
+                    <SectionTitle label={translate('resources.organizations.titles.bank_account')} />
+
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.bankAccount.bankId"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(2, 2)}
+                    />
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.bankAccount.branchId"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(3, 3)}
+                    />
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.bankAccount.accountNumber"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(6, 6)}
+                    />
+                    <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
+
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.creditCard.creditNumber"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(8, 16)}
+                    />
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.creditCard.expiringDate"
+                        formClassName={classes.formInput}
+                        type="month"
+                        defaultValue={`${new Date().getFullYear()}-${("0" + new Date().getMonth()).slice(-2)}`}
+                    />
+                    <TextInput
+                        source="paymentAgreement.paymentMethod.creditCard.cvv2"
+                        formClassName={classes.formInput}
+                        validate={validateDigits(3, 3)}
+                    />
                 </FormTab>
-                <FormTab label="יצירת קשר" >
-                 <TextInput
-                    type="email"
-                    source="communication.concat.email"
-                    label="מייל"
-                    formClassName={classes.center}
-                    validation={{ email: true }}
-                    validate={[required(), email()]}
-                />
-
-               <TextInput
-                    source="communication.concat.phone"
-                    label="טלפון"
-                    formClassName={classes.center}
-                />
-                </FormTab>
-                <FormTab label='פרטי מס"ב'>
-                 <SectionTitle label="זיכויים" />
-                 <TextInput
-                    source="masavData.credit.codeNosse"
-                    label="creditNosse"
-                    formClassName={classes.right}
-                />
-                 <TextInput
-                    source="masavData.credit.senderCode"
-                    label="senderCode"
-                    formClassName={classes.left}
-                />
-              <SectionTitle label="חיובים" />
-              <TextInput
-                    source="masavData.charge.codeNosse"
-                    label="creditNosse"
-                    formClassName={classes.right}
-                />
-                 <TextInput
-                    source="masavData.charge.senderCode"
-                    label="senderCode"
-                    formClassName={classes.left}
-                />
-
-                <Separator />
-                </FormTab>
-                <FormTab  label="שיטת תשלום">
-                 <TextInput
-                    source="paymentAgreement.minPrice"
-                    label="מחיר מינימום"
-                    formClassName={classes.right}
-                />
-                     <TextInput
-                    source="paymentAgreement.feePerUnit"
-                    label="תשלום ליחידה"
-                    formClassName={classes.center}
-                />
-
-                  <Separator />
-                  </FormTab>
-                  <FormTab label="חשבון בנק">
-                  <SectionTitle label="חשבון בנק" />
-                     <TextInput
-                    source="paymentAgreement.paymentMethod.bankAccount.bankId"
-                    label="בנק"
-                    formClassName={classes.right}
-                />
-                         <TextInput
-                    source="paymentAgreement.paymentMethod.bankAccount.branchId"
-                    label="סניף"
-                    formClassName={classes.center}
-                />
-                         <TextInput
-                    source="paymentAgreement.paymentMethod.bankAccount.accountNumber"
-                    label="מספר חשבון"
-                    formClassName={classes.left}
-                />
-                <Separator />
-                <SectionTitle label="כרטיס אשראי" />
-                     <TextInput
-                    source="paymentAgreement.paymentMethod.CreditCard.creditNumber"
-                    label="מספר אשראי"
-                    formClassName={classes.right}
-                />
-                         <TextInput
-                    source="paymentAgreement.paymentMethod.CreditCard.expiringDate"
-                    label="תוקף"
-                    formClassName={classes.center}
-                />
-                         <TextInput
-                    source="paymentAgreement.paymentMethod.CreditCard.cvv2"
-                    label="cvv"
-                    formClassName={classes.left}
-                />
+                <FormTab label={translate('resources.organizations.titles.payment_method')}>
+                    <SectionTitle label={translate('resources.organizations.titles.payment')} />
+                    <TextInput
+                        source="paymentAgreement.minPrice"
+                        formClassName={classes.formInput}
+                        validate={validatePrice}
+                        defaultValue={20}
+                    />
+                    <TextInput
+                        source="paymentAgreement.feePerUnit"
+                        formClassName={classes.formInput}
+                        validate={validatePrice}
+                        defaultValue={5}
+                    />
                 </FormTab>
             </TabbedForm>
         </Create>
     );
 };
+
 
 

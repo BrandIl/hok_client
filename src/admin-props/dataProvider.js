@@ -1,5 +1,5 @@
-import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
+import { fetchUtils } from "react-admin";
 
 const apiUrl = "http://127.0.0.1:4000/api";
 //const httpClient = fetchUtils.fetchJson;
@@ -8,8 +8,9 @@ const httpClient = (url, options = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }
-  const token = localStorage.getItem("token");
-  options.headers.set("Authorization", `Bearer ${token}`);
+ 
+  const token = localStorage.getItem("auth_token");
+  options.headers.set("Authorization", `${token}`);
 
   return fetchUtils.fetchJson(url, options);
 };
@@ -19,24 +20,14 @@ const dp = {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-    const { id, resource1, resource2 } = params.filter;
-
-    delete params.filter.id;
-    delete params.filter.resource1;
-    delete params.filter.resource2;
 
     const query = {
       sort: JSON.stringify([field, order]),
       range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
       filter: JSON.stringify(params.filter),
     };
-    let url;
 
-    if (resource1 !== undefined) {
-      url = `${apiUrl}/${resource1}/${id}/${resource2}?${stringify(query)}`;
-    } else {
-      url = `${apiUrl}/${resource}?${stringify(query)}`;
-    }
+    const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
     return httpClient(url).then(({ headers, json }) => ({
       data: json,
@@ -45,12 +36,14 @@ const dp = {
   },
 
   getOne: (resource, params) => {
-    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
+
+   return httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
       data: json,
     }));
   },
 
   getMany: (resource, params) => {
+    console.log("getMany", resource, params)
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
@@ -59,6 +52,7 @@ const dp = {
   },
 
   getManyReference: (resource, params) => {
+    console.log("getManyReference", resource, params)
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const query = {
@@ -101,12 +95,14 @@ const dp = {
       data: { ...params.data, id: json.id },
     })),
 
-  delete: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+  delete: (resource, params) =>{
+   console.log("id",params.id);
+   return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
-    }).then(({ json }) => ({ data: json })),
+    }).then(({ json }) => ({ data: json }))},
 
   deleteMany: (resource, params) => {
+    console.log("deleteMany",params);
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };

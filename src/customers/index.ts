@@ -1,17 +1,11 @@
 import VisitorIcon from '@material-ui/icons/People';
-
-import { CustomerList } from './CustomerList';
 import { CustomerCreate } from './CustomerCreate';
-import { CustomerEdit } from './CustomerEdit';
-//import { CustomerShow } from './CusromerShow';
-
+import { CustomersList } from './CustomerList';
 
 const resource = {
-    list: CustomerList,
+    list: CustomersList,
     create: CustomerCreate,
-    edit: CustomerEdit,
     icon: VisitorIcon,
-    options: { label: "לקוחות" }
 };
 
 export default resource;

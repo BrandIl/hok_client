@@ -1,33 +1,116 @@
-import { List, Datagrid, TextField, EditButton, ListProps, useQuery, Link, Identifier, ReferenceField, ReferenceManyField, SingleFieldList } from "react-admin"
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
-import { FC } from "react";
-import React from "react";
+import { Drawer, Theme, useMediaQuery } from '@material-ui/core';
+import classnames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { FC, Fragment, useCallback } from "react";
+import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
+import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
+import { ProjectEdit } from './ProjectEdit';
+import ProjectListDesktop from './ProjectListDesktpo'
+import ProjectFilter from './ProjectFilter';
+import { ProjectExporter } from './ProjectExporter';
+
+const ProjectsBulkActionButtons = (props: BulkActionProps) => (
+    <Fragment>
+        <BulkDeleteButton {...props} />
+    </Fragment>
+);
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    list: {
+        flexGrow: 1,
+        transition: theme.transitions.create(['all'], {
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: 0,
+    },
+    listWithDrawer: {
+        marginLeft: 600,
+    },
+    drawerPaper: {
+        zIndex: 100,
+        width: 600
+    },
+}));
 
 
-export const ProjectList:FC<ListProps> = ({...props}) =>  {
+export const ProjectList: FC<ListProps> = props => {
+    const classes = useStyles();
+    const isXSmall = useMediaQuery<Theme>(theme =>
+        theme.breakpoints.down('xs')
+    );
+    const history = useHistory();
 
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
-    const classes = useStyles(props);
+    const handleClose = useCallback(() => {
+        history.push('/projects');
+    }, [history]);
 
-    const projectsRowClick = (id:any, basePath:any, record:any) =>  {
-        return `/programs?filter={"projectId":"${id}"}`;
-       }
-    return(
-    <List {...props}>
-        <Datagrid  rowClick={projectsRowClick} >    
-            <TextField label="שם פרויקט"  source="name" />
-            <TextField  label="מוסד" source="organizationId.name"/>
-            <EditButton  />
-        </Datagrid>
-    </List>
+
+    return (
+        <div className={classes.root}>
+            <Route path="/projects/:id">
+                {({ match }: RouteChildrenProps<{ id: string }>) => {
+                    const isMatch = !!(
+                        match &&
+                        match.params
+                        && match.params.id !== 'create'
+                    );
+
+                    return (
+                        <Fragment>
+                            <List
+                                {...props}
+                                className={classnames(classes.list, {
+                                    [classes.listWithDrawer]: isMatch,
+                                })}
+                                exporter={ProjectExporter}
+                                bulkActionButtons={<ProjectsBulkActionButtons />}
+                                filters={<ProjectFilter />}
+                                perPage={5}
+                                sort={{ field: 'name', order: 'DESC' }}
+                            >
+                                {isXSmall ? (
+                                    <ProjectListDesktop />
+                                ) : (
+                                    <ProjectListDesktop
+                                        selectedRow={
+                                            isMatch
+                                                ? parseInt(
+                                                    (match as any).params.id,
+                                                    10
+                                                ) : undefined
+                                        }
+                                    />
+                                )}
+                            </List>
+                            <Drawer
+                                variant="persistent"
+                                open={isMatch}
+                                anchor="left"
+                                onClose={handleClose}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
+                                {isMatch ? (
+                                    <ProjectEdit
+                                        id={(match as any).params.id}
+                                        onCancel={handleClose}
+                                        {...props}
+                                    />
+                                ) : null}
+                            </Drawer>
+                        </Fragment>
+                    );
+                }}
+            </Route>
+        </div>
+
     );
 };
+
 
 

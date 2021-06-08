@@ -1,11 +1,19 @@
-import { List, EditButton, ListProps,  Button, TopToolbar, useNotify, useRedirect, useRefresh, fetchUtils, CreateButton } from "react-admin"
-import { makeStyles} from '@material-ui/core/styles';
-import { FC, Fragment, useCallback } from "react";
-import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
-import { Drawer, useMediaQuery, Theme } from '@material-ui/core';
+import { Drawer, Theme, useMediaQuery } from '@material-ui/core';
 import classnames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { FC, Fragment, useCallback } from "react";
+import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
+import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
+import { OrganizationEdit } from './OrganizationEdit';
 import OrganizationListDesktop from "./OrganizationListDesktop";
-import { OrganizationEdit } from "./OrganizationEdit";
+import OrganizationFilter from './OrganizationFilter';
+import { OrganizationExporter } from './OrganizationExporter';
+
+const OrganizationsBulkActionButtons = (props: BulkActionProps) => (
+    <Fragment>
+        <BulkDeleteButton {...props} />
+    </Fragment>
+);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -16,18 +24,19 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create(['all'], {
             duration: theme.transitions.duration.enteringScreen,
         }),
-        marginRight: 10,
+        marginRight: 0,
     },
     listWithDrawer: {
-        marginRight: 400,
+        marginLeft: 600,
     },
     drawerPaper: {
         zIndex: 100,
+        width: 600
     },
 }));
 
 
-export const OrganizationList:FC<ListProps> = ({...props}) =>  {
+export const OrganizationsList: FC<ListProps> = props => {
     const classes = useStyles();
     const isXSmall = useMediaQuery<Theme>(theme =>
         theme.breakpoints.down('xs')
@@ -35,117 +44,73 @@ export const OrganizationList:FC<ListProps> = ({...props}) =>  {
     const history = useHistory();
 
     const handleClose = useCallback(() => {
-        console.log("Cancel");
         history.push('/organizations');
     }, [history]);
 
-    const notify = useNotify();
-    const refresh = useRefresh();
-    const redirect = useRedirect();
- 
-    const genarte = () => {
-        try {
-            const date_agreement=15
-            const httpClient = fetchUtils.fetchJson;
-            const apiUrl = `http://127.0.0.1:4000/api/agreement/generate/${date_agreement}`;
-    
-           const res= httpClient(`${apiUrl}`,{method: "POST"}).then(({ json }) => (
-                {
-                data: json,
-              })
-           
-              );
-              console.log(res);
-              notify(`הדוח נוצר בהצלחה!`);
-              redirect('/organizations');
-              refresh();
-        } catch (error) {
-            notify(`ארעה שגיאה!`) 
-        }
-      
-    };
 
-    
-
-    const OrganizationShowActions = (basePath:any, data:any, resource:any) => (
-        <TopToolbar>
-            <CreateButton basePath="organizations" label="חדש"/>
-            <EditButton label="עדכן"  basePath="organizations" />
-          <input type="date" width="20px" name="date_agreement" ></input>
-            {/* Add your custom actions */}
-            <Button color="primary"  onClick={genarte} label="דוח מסב" ></Button>
-        </TopToolbar>
-    );
-
-    const programsRowClick = (id:any, basePath:any, record:any) =>  {
-       return `/programs?filter={"organizationId":"${id}"}`;
-      }
-      
-
-    return(
+    return (
         <div className={classes.root}>
-        <Route path="/organizations/:id">
-            {({ match }: RouteChildrenProps<{ id: string }>) => {
-                const isMatch = !!(
-                    match &&
-                    match.params 
-                    //&&  match.params.id !== 'create'
-                );
+            <Route path="/organizations/:id">
+                {({ match }: RouteChildrenProps<{ id: string }>) => {
+                    const isMatch = !!(
+                        match &&
+                        match.params
+                        && match.params.id !== 'create'
+                    );
 
-                return (
-                    <Fragment>
-                        <List
-                            {...props}
-                            className={classnames(classes.list, {
-                                [classes.listWithDrawer]: isMatch,
-                            })}
-                           // bulkActionButtons={<ReviewsBulkActionButtons />}
-                           /// filters={<ReviewFilter />}
-                            perPage={25}
-                            sort={{ field: 'date', order: 'DESC' }}
-                        >
-                            {isXSmall ? (
-                                 <OrganizationListDesktop/>
-                            ) : (
-                                <OrganizationListDesktop 
-                                    selectedRow={
-                                        isMatch
-                                            ? parseInt(
-                                                  (match as any).params.id,
-                                                  10
-                                              )
-                                            : undefined
-                                    }
-                                />
-                            )}
-                        </List>
-                        <Drawer
-                            variant="persistent"
-                            open={isMatch}
-                            anchor="right"
-                            onClose={handleClose}
-                            classes={{
-                                paper: classes.drawerPaper,
-                            }}
-                        >
-                            {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
-                            {isMatch ? (
-                                <OrganizationEdit
-                                    id={(match as any).params.id}
-                                    onCancel={handleClose}
-                                    {...props}
-                                />
-                            ) : null}
-                        </Drawer>
-                    </Fragment>
-                );
-            }}
-        </Route>
-    </div>
+                    return (
+                        <Fragment>
+                            <List
+                                {...props}
+                                className={classnames(classes.list, {
+                                    [classes.listWithDrawer]: isMatch,
+                                })}
+                                exporter={OrganizationExporter}
+                                bulkActionButtons={<OrganizationsBulkActionButtons />}
+                                filters={<OrganizationFilter />}
+                                perPage={5}
+                                sort={{ field: 'name', order: 'DESC' }}
+                            >
+                                {isXSmall ? (
+                                    <OrganizationListDesktop />
+                                ) : (
+                                    <OrganizationListDesktop
+                                        selectedRow={
+                                            isMatch
+                                                ? parseInt(
+                                                    (match as any).params.id,
+                                                    10
+                                                ) : undefined
+                                        }
+                                    />
+                                )}
+                            </List>
+                            <Drawer
+                                variant="persistent"
+                                open={isMatch}
+                                anchor="left"
+                                onClose={handleClose}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
+                                {isMatch ? (
+                                    <OrganizationEdit
+                                        id={(match as any).params.id}
+                                        onCancel={handleClose}
+                                        {...props}
+                                    />
+                                ) : null}
+                            </Drawer>
+                        </Fragment>
+                    );
+                }}
+            </Route>
+        </div>
 
     );
 };
-
 
 
 

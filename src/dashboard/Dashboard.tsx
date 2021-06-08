@@ -1,38 +1,11 @@
-import * as React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { ListProps, Title, useDataProvider, useVersion } from "react-admin";
-import { OrganizationList } from "../organizations/OrganizationList";
-import { FC, useCallback, useEffect } from "react";
+import { Theme, useMediaQuery } from '@material-ui/core';
+import { FC } from "react";
+import { ResourceComponentProps } from "react-admin";
 import GenerateCharges from "./GenerateCharges";
 import GenerateCredits from "./GenerateCredits";
-import dataProvider from "../admin-props/dataProvider";
-import { Review, Customer, Organization } from "../types";
-import { useMediaQuery, Theme } from '@material-ui/core';
-
-import { useState } from "react";
-import Welcome from "./Welcome";
 import OrganizationsListDashboard from "./OrganizationsListDashboard";
-import { PDFViewer } from "@react-pdf/renderer";
-import { MyDocument } from "../admin-props/PDF";
+import Welcome from "./Welcome";
 
-let fakeProps = {
-    basePath: "/organizations",
-    hasCreate: false,
-    hasEdit: false,
-    hasList: true,
-    hasShow: false,
-    location: { pathname: "/", search: "", hash: "", state: undefined },
-    match: { path: "/", url: "/", isExact: true, params: {} },
-    options: {},
-    permissions: null,
-    resource: "organizations"
-}
-
-
-interface State {
-    organizations?: Organization[];
-}
 
 const styles = {
     flex: { display: 'flex' },
@@ -45,11 +18,7 @@ const styles = {
 const Spacer = () => <span style={{ width: '1em' }} />;
 const VerticalSpacer = () => <span style={{ height: '1em' }} />;
 
-export const Dashboard: FC= () => {
-    const [state, setState] = useState<State>({});
-    const version = useVersion();
-    const dataProvider = useDataProvider();
-
+export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
     const isXSmall = useMediaQuery((theme: Theme) =>
         theme.breakpoints.down('xs')
     );
@@ -57,20 +26,20 @@ export const Dashboard: FC= () => {
         theme.breakpoints.down('md')
     );
 
-
-
-    const {
-       organizations,
-    } = state;
-  return isXSmall ? (
+    return isXSmall ? (
         <div>
             <div style={styles.flexColumn as React.CSSProperties}>
                 <Welcome />
-                <GenerateCharges />
-                <VerticalSpacer />
-                <GenerateCredits />
-                <VerticalSpacer />
-                {/* <OrganizationsListDashboard /> */}
+                {
+                    permissions === 'admin' &&
+                    <div>
+                        <GenerateCharges />
+                        <VerticalSpacer />
+                        <GenerateCredits />
+                        <VerticalSpacer />
+                    </div>
+                }
+                <OrganizationsListDashboard />
             </div>
         </div>
     ) : isSmall ? (
@@ -78,15 +47,16 @@ export const Dashboard: FC= () => {
             <div style={styles.singleCol}>
                 <Welcome />
             </div>
-            <div style={styles.flex}>
-                   <GenerateCharges />
-                <Spacer />
-                  <GenerateCredits />
-            </div>
+            {
+                permissions === 'admin' &&
+                <div style={styles.singleCol}>
+                    <GenerateCharges />
+                    <Spacer />
+                    <GenerateCredits />
+                </div>
+            }
             <div style={styles.singleCol}>
-            </div>
-            <div style={styles.singleCol}>
-            {/* <OrganizationsListDashboard /> */}
+                <OrganizationsListDashboard />
             </div>
         </div>
     ) : (
@@ -94,21 +64,18 @@ export const Dashboard: FC= () => {
             <Welcome />
             <div style={styles.flex}>
                 <div style={styles.leftCol}>
-                    <div style={styles.flex}>
-                           <GenerateCharges />
-                        <Spacer />
-                          <GenerateCredits />
-                    </div>
+                    {
+                        permissions === 'admin' &&
+                        <div style={styles.flex}>
+                            <GenerateCharges />
+                            <Spacer />
+                            <GenerateCredits />
+                        </div>
+                    }
                     <div style={styles.singleCol}>
-                        <Spacer/>
-                      {/* <OrganizationsListDashboard /> */}
-                      <VerticalSpacer/>
-                      <Spacer/>
-                      <VerticalSpacer/>
-                      <VerticalSpacer/>
-
+                        <OrganizationsListDashboard />
                     </div>
-                    
+
                 </div>
             </div>
         </>

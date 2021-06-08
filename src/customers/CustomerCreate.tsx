@@ -1,103 +1,143 @@
+import Hidden from '@material-ui/core/Hidden';
 import React, { FC } from 'react';
 import {
+    AutocompleteInput,
     Create,
     CreateProps,
-    DateInput,
+    Identifier,
+    ReferenceInput,
     SimpleForm,
     TextInput,
-    useTranslate,
-    PasswordInput,
-    required,
-    email,
-    TopToolbar,
-    Button,
-    ShowButton,
-    ReferenceInput,
-    SelectInput,
     useNotify,
     useRedirect,
     useRefresh,
-    FormTab,
-    TabbedForm,
+    useTranslate
 } from 'react-admin';
+import SectionTitle from '../utils/SectionTitle';
+import { useStyles } from '../utils/styles';
+import { validateDigits, validateEmail, validateNames } from '../utils/validations';
 
-import { requiredValidate, SectionTitle, Separator, useStyles } from '../styles/styles';
 
-export const CustomerCreate: FC<CreateProps> = props => {
-    
-const classes = useStyles(props);
-const notify = useNotify();
-const refresh = useRefresh();
-const redirect = useRedirect();
+interface CreatePropsWithOrgId extends CreateProps {
+    // onCancel?: () => void;
+    // orgId: Identifier;
+}
 
-const onSuccess = () => {
-    notify(`הלקוח נוסף בהצלחה!`)
-    redirect('/customers');
-    refresh();
-   
-}; 
+
+export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
+
+    const classes = useStyles(props);
+    const translate = useTranslate();
+    const notify = useNotify();
+    const refresh = useRefresh();
+    const redirect = useRedirect();
+
+
+    const onSuccess = () => {
+        notify(translate("resources.customers.notification.create_success"))
+        redirect('/customers');
+        refresh();
+    };
+
+    const onFailure = (err: Error) => {
+        notify(translate("resources.customers.notification.create_error", {
+            error: err.message
+        }))
+    };
+
     return (
-        <Create title="הוספת לקוח חדש"  onSuccess={onSuccess} {...props}>
-        <TabbedForm>
-            <FormTab label="פרטים אישיים">
-            <TextInput label="שם פרטי"  source="firstName" />
-            <TextInput label="שם משפחה"  source="lastName" />
-            <TextInput label="תעודת זהות"  source="identity" />
-            </FormTab>
-            <FormTab label="כתובת">
+        <Create
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            {...props}
+        >
+            <SimpleForm>
+                <SectionTitle
+                    label={translate("resources.customers.fieldGroups.personal_details")}
+                />
                 <TextInput
-                    source="communication.address.city.name"
-                    label="עיר"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
+                    source="firstName"
+                    formClassName={classes.formInput}
+                    validate={validateNames(2, 10)}
                 />
-               <TextInput
-                    source="communication.address.city.zip"
-                    label="מיקוד"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
+                <TextInput
+                    source="lastName"
+                    formClassName={classes.formInput}
+                    validate={validateNames(2, 10)}
                 />
-                <Separator/>
+                <SectionTitle
+                    label=""
+                />
+                <TextInput
+                    source="identity"
+                    formClassName={classes.formInput}
+                    validate={validateDigits(9, 9)}
+
+                />
+                <SectionTitle
+                    label={translate("resources.customers.fieldGroups.address")}
+                />
+                <TextInput
+                    source="address.city.name"
+                    formClassName={classes.formInput}
+                    validate={validateNames(2, 20)}
+                />
+                <TextInput
+                    source="address.city.zip"
+                    formClassName={classes.formInput}
+                    validate={validateDigits(5, 8)}
+                />
+                <SectionTitle
+                    label=""
+                />
+                <TextInput
+                    source="address.street.name"
+                    formClassName={classes.formInput}
+                    validate={validateNames(2, 20)}
+                />
+                <TextInput
+                    source="address.street.number"
+                    formClassName={classes.formInput}
+                    validate={validateNames(1, 20)}
+
+                />
+                <SectionTitle
+                    label={translate("resources.customers.fieldGroups.communication")}
+                />
 
                 <TextInput
-                    source="communication.address.street.name"
-                    label="רחוב"
-                    formClassName={classes.right}
-                    validate={requiredValidate}
-                />
-                <TextInput
-                    source="communication.address.street.number"
-                    label="מספר"
-                    formClassName={classes.left}
-                    validate={requiredValidate}
-                />
-                </FormTab>
-
-              <FormTab label="יצירת קשר">
-                 <TextInput
                     type="email"
                     source="communication.email"
-                    label="מייל"
-                    formClassName={classes.center}
-                    validation={{ email: true }}
-                    validate={[required(), email()]}
+                    formClassName={classes.formInput}
+                    validate={validateEmail}
                 />
 
-               <TextInput
-                    source="communication.phone"
-                    label="טלפון"
-                    formClassName={classes.center}
-                    validate={requiredValidate}
+                <TextInput
+                    source="communication.celular"
+                    formClassName={classes.formInput}
+                    validate={validateDigits(9, 10)}
                 />
-                </FormTab>
-                <FormTab label="מוסד">
-           
-                <ReferenceInput label="מוסד" source="organizationId" reference="organizations">
-                <SelectInput  optionText="name" formClassName={classes.left}  validate={requiredValidate}/>
-              </ReferenceInput>
-              </FormTab>
 
-        </TabbedForm>
+                <SectionTitle
+                    label={translate("resources.organizations.name", { smart_count: 1 })}
+                />
+
+                <ReferenceInput
+                    source="organizationId"
+                    reference="organizations"
+                // defaultValue={props.orgId}
+                >
+                    <AutocompleteInput
+                        optionText="name"
+                        disabled
+                    />
+                </ReferenceInput>
+
+
+
+
+            </SimpleForm>
         </Create>
     );
 };
+

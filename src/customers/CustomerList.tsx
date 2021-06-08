@@ -1,31 +1,116 @@
-import { List, Datagrid, TextField, EditButton, ListProps, ReferenceField } from "react-admin"
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
-import React, { FC } from "react";
+import { Drawer, Theme, useMediaQuery } from '@material-ui/core';
+import classnames from 'classnames';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { FC, Fragment, useCallback } from "react";
+import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
+import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
+import { CustomerEdit } from './CustomerEdit';
+import CustomerListDesktop from "./CustomerListDesktop";
+import CustomerFilter from './CustomerFilter';
+import { CustomerExporter } from './CustomerExporter';
+
+const CustomersBulkActionButtons = (props: BulkActionProps) => (
+    <Fragment>
+        <BulkDeleteButton {...props} />
+    </Fragment>
+);
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    list: {
+        flexGrow: 1,
+        transition: theme.transitions.create(['all'], {
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: 0,
+    },
+    listWithDrawer: {
+        marginLeft: 600,
+    },
+    drawerPaper: {
+        zIndex: 100,
+        width: 600
+    },
+}));
 
 
-export const CustomerList:FC<ListProps> = ({...props}) =>  {
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
-    const classes = useStyles(props);
-    const customersRowClick = (id:any, basePath:any, record:any) =>  {
-        return `/programs?filter={"customerId":"${id}"}`;
-       }
-    return(
-    <List {...props}>
-        <Datagrid rowClick={customersRowClick}>
-            <TextField label="שם פרטי"  source="firstName" />
-            <TextField label="שם משפחה"  source="lastName" />
-            <TextField label="תעודת זהות"  source="identity" />
-            <TextField source="organizationId.name" />
-        </Datagrid>
-    </List>
+export const CustomersList: FC<ListProps> = props => {
+    const classes = useStyles();
+    const isXSmall = useMediaQuery<Theme>(theme =>
+        theme.breakpoints.down('xs')
+    );
+    const history = useHistory();
+
+    const handleClose = useCallback(() => {
+        history.push('/Customers');
+    }, [history]);
+
+
+    return (
+        <div className={classes.root}>
+            <Route path="/Customers/:id">
+                {({ match }: RouteChildrenProps<{ id: string }>) => {
+                    const isMatch = !!(
+                        match &&
+                        match.params
+                        && match.params.id !== 'create'
+                    );
+
+                    return (
+                        <Fragment>
+                            <List
+                                {...props}
+                                className={classnames(classes.list, {
+                                    [classes.listWithDrawer]: isMatch,
+                                })}
+                                exporter={CustomerExporter}
+                                bulkActionButtons={<CustomersBulkActionButtons />}
+                                filters={<CustomerFilter />}
+                                perPage={5}
+                                sort={{ field: 'name', order: 'DESC' }}
+                            >
+                                {isXSmall ? (
+                                    <CustomerListDesktop />
+                                ) : (
+                                    <CustomerListDesktop
+                                        selectedRow={
+                                            isMatch
+                                                ? parseInt(
+                                                    (match as any).params.id,
+                                                    10
+                                                ) : undefined
+                                        }
+                                    />
+                                )}
+                            </List>
+                            <Drawer
+                                variant="persistent"
+                                open={isMatch}
+                                anchor="left"
+                                onClose={handleClose}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
+                                {isMatch ? (
+                                    <CustomerEdit
+                                        id={(match as any).params.id}
+                                        onCancel={handleClose}
+                                        {...props}
+                                    />
+                                ) : null}
+                            </Drawer>
+                        </Fragment>
+                    );
+                }}
+            </Route>
+        </div>
+
     );
 };
+
 
 

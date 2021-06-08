@@ -1,65 +1,32 @@
 import React, { FC } from 'react';
 import {
-    Edit,
-    EditProps,
+    Create, CreateProps,
     SimpleForm,
     TextInput,
-    required,
-    email,
-    TopToolbar,
-    Button,
-    ShowButton,
-    Create,
-    SelectInput,
-    ReferenceInput,
-    useNotify,
-    useRedirect,
-    useRefresh,
+    useTranslate
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
+import { OrganizationInput } from '../organizations/OrganizationInput';
+import { useStyles } from '../utils/styles';
+import { validateNames } from '../utils/validations';
+import { ProjectCreateActions } from './ProjectCreateActions';
 
-export const ProjectCreate: FC<EditProps> = props => {
-   
-
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
+export const ProjectCreate: FC<CreateProps> = props => {
+    debugger;
     const classes = useStyles(props);
-    const requiredValidate = [required()];
-    const Separator = () => <Box pt="1em" />;
-    const SectionTitle = ({ label }: { label: string }) => {
-    return (
-        <Typography variant="h6" gutterBottom>
-            {label}
-        </Typography>
-    );
-   };
-   const notify = useNotify();
-   const refresh = useRefresh();
-   const redirect = useRedirect();
+    const translate = useTranslate();
 
-   const onSuccess = () => {
-       
-       notify(`המוסד נוסף בהצלחה!`)
-       redirect('/projects');
-       refresh();
-   };
     return (
-        <Create title="הוספת פרויקט" onSuccess={onSuccess}   {...props}>
+        <Create
+            actions={<ProjectCreateActions />}
+            {...props}
+        >
             <SimpleForm>
-            <ReferenceInput label="ארגון" source="organizationId" reference="organizations">
-                <SelectInput optionText="name" />
-          </ReferenceInput>
-            <TextInput
+                <OrganizationInput />
+
+                <TextInput
                     source="name"
-                    label="שם פרויקט"
-                     validate={requiredValidate}
+                    validate={validateNames(2, 15)}
+                    formClassName={classes.formInput}
                 />
             </SimpleForm>
         </Create>

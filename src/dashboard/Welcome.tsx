@@ -1,12 +1,10 @@
+import { Box, Card, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
-import { Box, Card, CardActions, Button, Typography } from '@material-ui/core';
-import HomeIcon from '@material-ui/icons/Home';
-import CodeIcon from '@material-ui/icons/Code';
-import { makeStyles } from '@material-ui/core/styles';
 import { useTranslate } from 'react-admin';
-
 import publishArticleImage from './welcome_illustration.svg';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +47,7 @@ const Welcome: FC = () => {
                     </Typography>
                     <Box maxWidth="40em">
                         <Typography variant="body1" component="p" gutterBottom>
-                   
+
                         </Typography>
                     </Box>
                 </Box>

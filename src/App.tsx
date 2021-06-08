@@ -1,79 +1,65 @@
+import simpleRestProvider from "ra-data-simple-rest";
+import polyglotI18nProvider from 'ra-i18n-polyglot';
 import {
   Admin,
   fetchUtils,
-  Resource,
-  ShowGuesser,
+  Resource
 } from "react-admin";
-import simpleRestProvider from "ra-data-simple-rest";
-
-
-import organizations from "./organizations";
-import projects from "./projects";
-import programs from "./programs";
-import  customers from "./customers";
-
-
-import UserIcon from "@material-ui/icons/People";
-
-import { GenerateMasavFile } from "./reports/genarateMasavFile";
-
-import { notFound } from "./admin-props/notFound";
-import { theme } from "./admin-props/theme";
-//import { Login } from "./admin-props/LoginPage";
-
-import {Layout } from './layout';
-import routes from './routes'
-import { Dashboard } from "./dashboard";
-import users from "./users";
 import authProvider from "./admin-props/authProvider";
+import customers from "./customers";
+import { Dashboard } from "./dashboard";
+import hebrewMessages from './i18n/heb';
+import { Layout, Login } from './layout';
+import organizations from "./organizations";
+import programs from "./programs";
+import projects from "./projects";
+import { customRoutes } from "./utils/routes";
+import themeReducer from "./utils/themeReducer";
+import users from "./users";
+import dp from './admin-props/dataProvider'
 
-const fetchJson = (url:URL, options:any ={}) => {
+
+const fetchJson = (url: URL, options: any = {}) => {
+  debugger;
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }
   // add your own headers here
-  const token = localStorage.getItem("token");
-  console.log("add header");
-  console.log(localStorage.getItem("token"));
+  const token = localStorage.getItem("auth_token");
   options.headers.set("Authorization", `${token}`);
+  //options.headers.set("Authorization", `${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-
 const dataProvider = simpleRestProvider("http://localhost:4000/api", fetchJson);
+const i18nProvider = polyglotI18nProvider(locale => {
+  if (locale === 'en') {
+    return import('./i18n/en').then(messages => messages.default);
+  }
+
+  // Always fallback on hebrew
+  return hebrewMessages;
+}, 'heb');
 
 const App = () => (
   <Admin
-    //customReducers={{ a: ListGuesser }}
-    disableTelemetry
-    catchAll={notFound}
-    title="Hello"
-     dashboard={Dashboard}
-    layout= {Layout}
-    theme={theme}
+    title=""
     dataProvider={dataProvider}
+    customReducers={{ theme: themeReducer }}
+    customRoutes={customRoutes}
     authProvider={authProvider}
-     customRoutes={routes}
-    //loginPage={Login}
-    // LoginPage={LoginPage}
+    dashboard={Dashboard}
+    loginPage={Login}
+    layout={Layout}
+    i18nProvider={i18nProvider}
+    disableTelemetry
   >
     <Resource name="organizations" {...organizations} />
     <Resource name="projects" {...projects} />
-    <Resource  name="customers" {...customers}   />
-    <Resource  name="programs" {...programs}/>
-    <Resource  name="users" {...users}/>
-
-
-
-    <Resource
-      name="agreement"
-      options={{ label: "a" }}
-      list={GenerateMasavFile}
-      //edit={CustomerEdit}
-      //create={CustomerCreate}
-      // show={CustomerShow}
-      icon={UserIcon}
-    />
+    <Resource name="customers"  {...customers} />
+    <Resource name="programs" {...programs} />
+    <Resource name="users" {...users} />
   </Admin>
 );
+
 
 export default App;

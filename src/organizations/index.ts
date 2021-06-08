@@ -1,20 +1,10 @@
 import BusinessIcon from '@material-ui/icons/Business';
-
-import { OrganizationList } from './OrganizationList';
 import { OrganizationCreate } from './OrganizationCreate';
-import { OrganizationEdit } from './OrganizationEdit';
-import { OrganizationShow } from './OrganizationShow';
+import { OrganizationsList } from './OrganizationList';
 
-
-
-const resource = {
-    list: OrganizationList,
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+    list: OrganizationsList,
     create: OrganizationCreate,
-    edit: OrganizationEdit,
-    show: OrganizationShow,
     icon: BusinessIcon,
-    options: { label: "מוסדות" }
-
 };
-
-export default resource;

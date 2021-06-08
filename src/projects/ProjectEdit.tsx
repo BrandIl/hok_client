@@ -1,55 +1,92 @@
+import { IconButton, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
-    Edit,
-    EditProps,
-    SimpleForm,
-    TextInput,
-    required,
-    email,
-    TopToolbar,
-    Button,
-    ShowButton,
-    Create,
-    ReferenceInput,
-    SelectInput,
+    EditContextProvider, EditProps,
+    SimpleForm, TextInput,
+    useEditController, useTranslate
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/styles/withStyles';
+import { OrganizationInput } from '../organizations/OrganizationInput';
+import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
+import SectionTitle from '../utils/SectionTitle';
+import { Organization } from '../utils/types';
+import { validateNames } from '../utils/validations';
 
-export const ProjectEdit: FC<EditProps> = props => {
-   
 
-    const styles: Styles<Theme, any> = {
-        right: { display: 'inline-block', direction: 'rtl',margin: 32},
-        center: { display: 'inline-block',  direction: 'rtl',margin: 32},
-        left: { display: 'inline-block', direction: 'rtl',margin: 32 },
-    };
-    
-    const useStyles = makeStyles(styles);
+const useStyles = makeStyles(theme => ({
+    root: {
+        paddingTop: 40,
+    },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: '1em',
+    },
+    form: {
+        [theme.breakpoints.up('xs')]: {
+            width: 600,
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: '100vw',
+            marginTop: -30,
+        },
+    },
+    inlineField: {
+        display: 'inline-block',
+        marginInlineEnd: 20,
+    },
+}));
+
+interface Props extends EditProps {
+    onCancel: () => void;
+}
+
+
+export const ProjectEdit: FC<Props> = ({ onCancel, ...props }) => {
     const classes = useStyles(props);
-    const requiredValidate = [required()];
-    const Separator = () => <Box pt="1em" />;
-    const SectionTitle = ({ label }: { label: string }) => {
+    const controllerProps = useEditController<Organization>(props);
+    const translate = useTranslate();
+
+    if (!controllerProps.record) {
+        return null;
+    }
     return (
-        <Typography variant="h6" gutterBottom>
-            {label}
-        </Typography>
-    );
-   };
-    return (
-        <Edit title="הוספת פרויקט"  {...props}>
-            <SimpleForm>
-           <ReferenceInput label="ארגון" source="id" reference="organizations">
-                <SelectInput optionText="name"  />
-          </ReferenceInput>
-            <TextInput
-                    source="name"
-                    label="שם פרויקט"
-                     validate={requiredValidate}
-                />
-            </SimpleForm>
-        </Edit>
+        <div className={classes.root}>
+            <div className={classes.title}>
+                <Typography variant="h6">
+                    {translate('resources.projects.details')}
+                </Typography>
+                <IconButton onClick={onCancel}>
+                    <CloseIcon />
+                </IconButton>
+            </div>
+            <EditContextProvider value={controllerProps}>
+                <SimpleForm
+                    className={classes.form}
+                    basePath={controllerProps.basePath}
+                    record={controllerProps.record}
+                    save={controllerProps.save}
+                    version={controllerProps.version}
+                    redirect="list"
+                    resource="projects"
+                >
+
+                    <>
+                        <OrganizationReferenceField />
+                        <OrganizationInput />
+                    </>
+
+                    <TextInput
+                        source="name"
+                        formClassName={classes.inlineField}
+                        validate={validateNames(2, 10)}
+                    />
+                </SimpleForm>
+            </EditContextProvider>
+        </div >
     );
 };
+
 

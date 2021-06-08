@@ -1,47 +1,16 @@
-import React, { FC, useEffect, useState} from 'react';
-import {
-    Edit,
-    EditProps,
-    TextInput,
-    required,
-    email,
-    FormTab,
-    TabbedForm,
-    useEditController,
-    useTranslate,
-    EditContextProvider,
-    Button,
-    CreateButton,
-    Show,
-    SimpleShowLayout,
-    TextField,
-    useDataProvider,
-    useVersion,
-    FieldTitle,
-} from 'react-admin';
-import unstable_Box from "@material-ui/core/Box"
-import { Card,  Typography, Divider } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Customer, Organization, Program } from '../types';
 import CloseIcon from '@material-ui/icons/Close';
-import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useMediaQuery, Theme } from '@material-ui/core';
+import React, { FC } from 'react';
+import {
+    EditContextProvider, EditProps,
+    FormTab, required, TabbedForm, TextInput,
+    useEditController, useTranslate
+} from 'react-admin';
+import SectionTitle from '../utils/SectionTitle';
+import { Organization } from '../utils/types';
+import { validateDigits, validateEmail, validateNames, validatePrice } from '../utils/validations';
 
-import GenerateCharges from '../dashboard/GenerateCharges';
-import GenerateCredits from '../dashboard/GenerateCredits';
-import  ProgramsListDashboard  from '../programs/ProgramListDashboard';
-import CustomersListDashboard from '../customers/CustomerListDashboard';
-import { OrganizationShow } from './OrganizationShow';
-import CollectionReport from './CollectionReport';
-import FinishedReport from './FinishedReport';
-import { OrganizationCard } from './OrganizationCard';
-
-
-const Box =unstable_Box;
-interface State {
-    programs?: Program[]
-}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,11 +20,11 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        margin: '3em',
+        margin: '1em',
     },
     form: {
         [theme.breakpoints.up('xs')]: {
-            width: 400,
+            width: 600,
         },
         [theme.breakpoints.down('xs')]: {
             width: '100vw',
@@ -64,113 +33,204 @@ const useStyles = makeStyles(theme => ({
     },
     inlineField: {
         display: 'inline-block',
-        width: '100%',
+        marginInlineEnd: 20,
     },
-    
 }));
 
-
-const styles = {
-    flex: { display: 'flex' },
-    flexColumn: { display: 'flex', flexDirection: 'column' },
-    leftCol: { flex: 1, marginRight: '0.5em' },
-    rightCol: { flex: 6, marginLeft: '0.5em' },
-    singleCol: { marginTop: '1em', marginBottom: '1em' },
-    
-};
-
-
-const requiredValidate = [required()];
 interface Props extends EditProps {
-  onCancel?: () => void;
+    onCancel: () => void;
 }
-const Spacer = () => <span style={{ width: '1em' }} />;
-const VerticalSpacer = () => <span style={{ height: '1em' }} />;
+
+
 
 export const OrganizationEdit: FC<Props> = ({ onCancel, ...props }) => {
-    const [state, setState] = useState<State>({});
-    const version = useVersion();
-    const dataProvider = useDataProvider();
-
-    const isXSmall = useMediaQuery((theme: Theme) =>
-        theme.breakpoints.down('xs')
-    );
-    const isSmall = useMediaQuery((theme: Theme) =>
-        theme.breakpoints.down('md')
-    );
-
-    // const fetchCustomers = useCallback(async () => {
-    //     const { data: customers } = await dataProvider.getList<Customer>(
-    //         'customers',
-    //         {
-    //             filter: { organizationId: props.id},
-    //             sort: { field: 'name', order: 'DESC' },
-    //             pagination: { page: 1, perPage: 100 },
-    //         }
-    //     );
-    //     setState(state => ({ ...state, customers }));
-       
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [dataProvider]);
-
-    // const fetchPrograms = useCallback(async () => {
-    //     const { data: programs } = await dataProvider.getList<Program>(
-    //         'programs',
-    //         {
-    //             filter: { organizationId: props.id},
-    //             sort: { field: 'name', order: 'DESC' },
-    //             pagination: { page: 1, perPage: 100 },
-    //         }
-    //     );
-    //     setState(state => ({ ...state, programs }));
-       
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [dataProvider]);
-
-   useEffect(() => {
-    //fetchPrograms();
-   // fetchCustomers();
-    }, [version]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const classes = useStyles();
+    const classes = useStyles(props);
     const controllerProps = useEditController<Organization>(props);
     const translate = useTranslate();
-    const history = useHistory();
+
     if (!controllerProps.record) {
         return null;
     }
-    const {
-        programs,
-     } = state;
-
-     const Title = ( record:any ) => {
-        return <span> {record ? `${record.record.name}` : ''}</span>;
-
-  
-    };
-
-
-
     return (
-       <div>
-          <Show component="div" title={<Title />} {...props}>
-          <SimpleShowLayout >
-            <OrganizationCard  />
-         </SimpleShowLayout>
-          </Show>
-
-          <div style={styles.flex}>
-          <div style={styles.rightCol}>
-             <ProgramsListDashboard organizationId={ props.id}/>
-          </div>
-                <div style={styles.leftCol}>
-                    <div style={styles.flex}>
-                           <FinishedReport />
-                           <CollectionReport />
-                    </div>
-                    <CustomersListDashboard organizationId={ props.id}/>
-                </div>
+        <div className={classes.root}>
+            <div className={classes.title}>
+                <Typography variant="h6">
+                    {translate('resources.organizations.details')}
+                </Typography>
+                <IconButton onClick={onCancel}>
+                    <CloseIcon />
+                </IconButton>
             </div>
-       </div>
+            <EditContextProvider value={controllerProps}>
+                <TabbedForm
+                    className={classes.form}
+                    basePath={controllerProps.basePath}
+                    record={controllerProps.record}
+                    save={controllerProps.save}
+                    version={controllerProps.version}
+                    redirect="list"
+                    resource="organizations"
+                //  toolbar={<ReviewEditToolbar />}
+                >
+                    <FormTab label={translate('resources.organizations.titles.organization_details')}>
+
+                        <SectionTitle label={translate('resources.organizations.titles.organization_name')} />
+                        <TextInput
+                            autoFocus
+                            source="name"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateNames(2, 30)}
+
+                        />
+                        <SectionTitle label={translate('resources.organizations.titles.address')} />
+
+                        <TextInput
+                            source="communication.address.city.name"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateNames(2, 30)}
+
+                        />
+                        <TextInput
+                            source="communication.address.city.zip"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(5, 8)}
+                        />
+
+                        <TextInput
+                            source="communication.address.street.name"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateNames(2, 30)}
+                        />
+                        <TextInput
+                            source="communication.address.street.number"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateNames(1, 6)}
+                        />
+                        <SectionTitle label={translate('resources.organizations.titles.details')} />
+
+                        <TextInput
+                            source="communication.concats.name"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateNames(2, 30)}
+                        />
+                        <TextInput
+                            type="email"
+                            source="communication.concats.email"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateEmail}
+                        />
+
+                        <TextInput
+                            source="communication.concats.celular"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(9, 10)}
+                        />
+                        <TextInput
+                            source="communication.concats.remarks"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                        />
+                    </FormTab>
+                    <FormTab label={translate('resources.organizations.titles.masav_details')}>
+                        <SectionTitle label={translate('resources.organizations.titles.credits')} />
+
+                        <TextInput
+                            source="masavData.credit.codeNosse"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(8, 8)}
+                        />
+                        <TextInput
+                            source="masavData.credit.senderCode"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(5, 5)}
+                        />
+                        <SectionTitle label={translate('resources.organizations.titles.charges')} />
+
+
+                        <TextInput
+                            source="masavData.charge.codeNosse"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(8, 8)}
+                        />
+                        <TextInput
+                            source="masavData.charge.senderCode"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(5, 5)}
+                        />
+
+                        <SectionTitle label={translate('resources.organizations.titles.bank_account')} />
+
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.bankAccount.bankId"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(2, 2)}
+                        />
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.bankAccount.branchId"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(3, 3)}
+                        />
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.bankAccount.accountNumber"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(6, 6)}
+                        />
+                        <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
+
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.creditCard.creditNumber"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(8, 16)}
+                        />
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.creditCard.expiringDate"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            type="month"
+                            validate={required()}
+                        />
+                        <TextInput
+                            source="paymentAgreement.paymentMethod.creditCard.cvv2"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validateDigits(3, 3)}
+                        />
+                    </FormTab>
+                    <FormTab label={translate('resources.organizations.titles.payment_method')}>
+                        <SectionTitle label={translate('resources.organizations.titles.payment')} />
+                        <TextInput
+                            source="paymentAgreement.minPrice"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validatePrice}
+                        />
+                        <TextInput
+                            source="paymentAgreement.feePerUnit"
+                            formClassName={classes.inlineField}
+                            variant="standard"
+                            validate={validatePrice}
+                        />
+                    </FormTab>
+                </TabbedForm>
+            </EditContextProvider>
+        </div >
     );
 };
+
+
