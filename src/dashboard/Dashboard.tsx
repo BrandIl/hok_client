@@ -1,6 +1,7 @@
 import { Theme, useMediaQuery } from '@material-ui/core';
 import { FC } from "react";
 import { ResourceComponentProps } from "react-admin";
+import { TryEmail } from '../utils/TryEmail';
 import GenerateCharges from "./GenerateCharges";
 import GenerateCredits from "./GenerateCredits";
 import OrganizationsListDashboard from "./OrganizationsListDashboard";
@@ -62,6 +63,7 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
     ) : (
         <>
             <Welcome />
+            <TryEmail />
             <div style={styles.flex}>
                 <div style={styles.leftCol}>
                     {

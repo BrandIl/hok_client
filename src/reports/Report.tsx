@@ -1,12 +1,17 @@
-import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    Datagrid, DatagridProps, Identifier, TextField
+    Identifier,
+    Datagrid,
+    TextField,
+    DatagridProps,
+    ReferenceField,
 } from 'react-admin';
-import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
-import rowStyle from './rowStyle';
+import { makeStyles } from '@material-ui/core/styles';
 
+import ProjectReferenceField from '../projects/ProjectReferenceField';
+import CustomerReferenceField from '../customers/CustomerReferenceField';
+import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
 
 const useListStyles = makeStyles({
     headerRow: {
@@ -20,7 +25,12 @@ const useListStyles = makeStyles({
     rowCell: {
         padding: '6px 8px 6px 8px',
     },
-
+    comment: {
+        maxWidth: '18em',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
 });
 
 export interface ProjectListDesktopProps extends DatagridProps {
@@ -36,7 +46,6 @@ const ProjectListDesktop: FC<ProjectListDesktopProps> = ({
         <Datagrid
             rowClick="edit"
             // @ts-ignore
-            rowStyle={rowStyle(selectedRow)}
             classes={{
                 headerRow: classes.headerRow,
                 headerCell: classes.headerCell,
@@ -45,9 +54,8 @@ const ProjectListDesktop: FC<ProjectListDesktopProps> = ({
             optimized
             {...props}
         >
-            <TextField source="name" />
             <OrganizationReferenceField />
-
+            <TextField source="name" />
         </Datagrid >
     );
 };

@@ -1,18 +1,16 @@
+import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    Identifier,
-    Datagrid,
-    TextField,
-    DatagridProps,
-    ReferenceField,
+    Datagrid, DatagridProps, DateField, Identifier, TextField
 } from 'react-admin';
-import { makeStyles } from '@material-ui/core/styles';
-
-import rowStyle from './rowStyle';
-import ProjectReferenceField from '../projects/ProjectReferenceField';
 import CustomerReferenceField from '../customers/CustomerReferenceField';
 import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
+import ProjectReferenceField from '../projects/ProjectReferenceField';
+import rowStyle from './rowStyle';
+import { Typography } from '@material-ui/core';
+
+
 
 const useListStyles = makeStyles({
     headerRow: {
@@ -33,7 +31,17 @@ const useListStyles = makeStyles({
         whiteSpace: 'nowrap',
     },
 });
-
+const Aside = (data: any, ids: any) => {
+    console.log(`${ids}`)
+    return (
+        <div style={{ width: 200, margin: '1em' }}>
+            <Typography>Post details</Typography>
+            <Typography variant="body1">
+                {/* Total value: {ids.map(id => data[id]).reduce((sum, balance) => sum + balance.total_value)} */}
+            </Typography>
+        </div>
+    )
+};
 export interface ProgramListDesktopProps extends DatagridProps {
     selectedRow?: Identifier;
 }
@@ -60,15 +68,13 @@ const ProgramLListDesktop: FC<ProgramListDesktopProps> = ({
             <CustomerReferenceField />
             <ProjectReferenceField />
             <TextField source="sum" />
-            <TextField source="startDate" />
+            <DateField source="startDate" />
+            <DateField source="endDate" />
             <TextField source="numOfPayments" />
             <TextField source="launchDay" />
             <TextField source="paymentMethod.bankAccount.bankId" />
             <TextField source="paymentMethod.bankAccount.branchId" />
             <TextField source="paymentMethod.bankAccount.accountNumber" />
-            <TextField source="paymentMethod.creditCard.creditNumber" />
-            <TextField source="paymentMethod.creditCard.expiringDate" />
-            <TextField source="paymentMethod.creditCard.cvv2" />
         </Datagrid>
     );
 };

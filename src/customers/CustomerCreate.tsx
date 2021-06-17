@@ -18,37 +18,17 @@ import { useStyles } from '../utils/styles';
 import { validateDigits, validateEmail, validateNames } from '../utils/validations';
 
 
-interface CreatePropsWithOrgId extends CreateProps {
-    // onCancel?: () => void;
-    // orgId: Identifier;
-}
 
 
-export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
+export const CustomerCreate: FC<CreateProps> = props => {
 
     const classes = useStyles(props);
     const translate = useTranslate();
-    const notify = useNotify();
-    const refresh = useRefresh();
-    const redirect = useRedirect();
 
 
-    const onSuccess = () => {
-        notify(translate("resources.customers.notification.create_success"))
-        redirect('/customers');
-        refresh();
-    };
-
-    const onFailure = (err: Error) => {
-        notify(translate("resources.customers.notification.create_error", {
-            error: err.message
-        }))
-    };
 
     return (
         <Create
-            onSuccess={onSuccess}
-            onFailure={onFailure}
             {...props}
         >
             <SimpleForm>
@@ -78,12 +58,12 @@ export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
                     label={translate("resources.customers.fieldGroups.address")}
                 />
                 <TextInput
-                    source="address.city.name"
+                    source="communication.address.city.name"
                     formClassName={classes.formInput}
                     validate={validateNames(2, 20)}
                 />
                 <TextInput
-                    source="address.city.zip"
+                    source="communication.address.city.zip"
                     formClassName={classes.formInput}
                     validate={validateDigits(5, 8)}
                 />
@@ -91,12 +71,12 @@ export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
                     label=""
                 />
                 <TextInput
-                    source="address.street.name"
+                    source="communication.address.street.name"
                     formClassName={classes.formInput}
                     validate={validateNames(2, 20)}
                 />
                 <TextInput
-                    source="address.street.number"
+                    source="communication.address.street.number"
                     formClassName={classes.formInput}
                     validate={validateNames(1, 20)}
 
@@ -117,7 +97,10 @@ export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
                     formClassName={classes.formInput}
                     validate={validateDigits(9, 10)}
                 />
-
+                <TextInput
+                    source="communication.remarks"
+                    formClassName={classes.formInput}
+                />
                 <SectionTitle
                     label={translate("resources.organizations.name", { smart_count: 1 })}
                 />
@@ -125,11 +108,9 @@ export const CustomerCreate: FC<CreatePropsWithOrgId> = props => {
                 <ReferenceInput
                     source="organizationId"
                     reference="organizations"
-                // defaultValue={props.orgId}
                 >
                     <AutocompleteInput
                         optionText="name"
-                        disabled
                     />
                 </ReferenceInput>
 

@@ -4,8 +4,11 @@ import {
     Filter,
     SearchInput,
     FilterProps,
+    ReferenceInput,
+    AutocompleteInput,
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
+import { Organization } from '../utils/types';
 
 
 const useFilterStyles = makeStyles({
@@ -24,6 +27,16 @@ const ProgramFilter: FC<Omit<FilterProps, 'children'>> = props => {
                 alwaysOn
             />
 
+
+            <ReferenceInput source="organizationId" reference="organizations">
+                <AutocompleteInput
+                    optionText={(choice?: Organization) =>
+                        choice?.id // the empty choice is { id: '' }
+                            ? `${choice.name}`
+                            : ''
+                    }
+                />
+            </ReferenceInput>
         </Filter>
     );
 };

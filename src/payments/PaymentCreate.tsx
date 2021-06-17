@@ -11,22 +11,22 @@ import { ProjectInput } from '../projects/ProjectInput';
 import SectionTitle from '../utils/SectionTitle';
 import { useStyles } from '../utils/styles';
 import { expiringDate, validateDigits, validatePrice } from '../utils/validations';
-import { ProgramCreateActions } from './ProgramCreateActions';
+import { PaymentCreateActions } from './PaymentCreateActions';
 
 
 
-export const ProgramCreate: FC<CreateProps> = props => {
+export const PaymentCreate: FC<CreateProps> = props => {
     const classes = useStyles(props);
     const translate = useTranslate();
 
     return (
         <Create
-            actions={<ProgramCreateActions />}
+            actions={<PaymentCreateActions />}
             {...props}
         >
             <SimpleForm>
                 <SectionTitle
-                    label={translate("resources.programs.fieldGroups.customer_details")}
+                    label={translate("resources.payments.fieldGroups.customer_details")}
                 />
                 <>
                     <OrganizationInput />
@@ -35,7 +35,7 @@ export const ProgramCreate: FC<CreateProps> = props => {
                 </>
 
                 <SectionTitle
-                    label={translate("resources.programs.fieldGroups.collection_details")}
+                    label={translate("resources.payments.fieldGroups.collection_details")}
                 />
                 <TextInput
                     source="sum"
@@ -72,7 +72,7 @@ export const ProgramCreate: FC<CreateProps> = props => {
 
 
                 <SectionTitle
-                    label={translate("resources.programs.fieldGroups.bank_account")}
+                    label={translate("resources.payments.fieldGroups.bank_account")}
                 />
 
                 <TextInput
@@ -92,7 +92,7 @@ export const ProgramCreate: FC<CreateProps> = props => {
                 />
 
                 {/* <SectionTitle
-                    label={translate("resources.programs.fieldGroups.credit_card")}
+                    label={translate("resources.payments.fieldGroups.credit_card")}
                 />
                 <TextInput
                     source="paymentMethod.creditCard.creditNumber"

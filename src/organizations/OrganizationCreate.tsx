@@ -125,7 +125,7 @@ export const OrganizationCreate: FC<CreateProps> = props => {
                         formClassName={classes.formInput}
                         validate={validateDigits(6, 6)}
                     />
-                    <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
+                    {/* <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
 
                     <TextInput
                         source="paymentAgreement.paymentMethod.creditCard.creditNumber"
@@ -142,7 +142,7 @@ export const OrganizationCreate: FC<CreateProps> = props => {
                         source="paymentAgreement.paymentMethod.creditCard.cvv2"
                         formClassName={classes.formInput}
                         validate={validateDigits(3, 3)}
-                    />
+                    /> */}
                 </FormTab>
                 <FormTab label={translate('resources.organizations.titles.payment_method')}>
                     <SectionTitle label={translate('resources.organizations.titles.payment')} />

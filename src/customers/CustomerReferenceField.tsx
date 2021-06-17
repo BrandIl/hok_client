@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { ReferenceField, ReferenceFieldProps, TextField } from 'react-admin';
+import { ReferenceField, ReferenceFieldProps } from 'react-admin';
+import FullNameField from './FullNameField';
 
 interface Props {
     source?: string;
@@ -15,14 +16,15 @@ const CustomerReferenceField: FC<
         reference="customers"
         {...props}
     >
+        <FullNameField />
 
-        <TextField source="lastName" />
     </ReferenceField>
+
 );
 
 CustomerReferenceField.defaultProps = {
 
-    source: 'CustomerId',
+    source: 'customerId',
     addLabel: true,
 };
 

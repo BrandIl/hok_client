@@ -93,12 +93,12 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                         label={translate("resources.customers.fieldGroups.address")}
                     />
                     <TextInput
-                        source="address.city.name"
+                        source="communication.address.city.name"
                         formClassName={classes.formInput}
                         validate={validateNames(2, 20)}
                     />
                     <TextInput
-                        source="address.city.zip"
+                        source="communication.address.city.zip"
                         formClassName={classes.formInput}
                         validate={validateDigits(5, 8)}
                     />
@@ -106,12 +106,12 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                         label=""
                     />
                     <TextInput
-                        source="address.street.name"
+                        source="communication.address.street.name"
                         formClassName={classes.formInput}
                         validate={validateNames(2, 20)}
                     />
                     <TextInput
-                        source="address.street.number"
+                        source="communication.address.street.number"
                         formClassName={classes.formInput}
                         validate={validateNames(1, 20)}
 
@@ -132,6 +132,11 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                         formClassName={classes.formInput}
                         validate={validateDigits(9, 10)}
                     />
+                    <TextInput
+                        source="communication.remarks"
+                        formClassName={classes.formInput}
+                    />
+
 
                     <SectionTitle
                         label={translate("resources.organizations.name", { smart_count: 1 })}
@@ -140,18 +145,15 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                     <ReferenceInput
                         source="organizationId"
                         reference="organizations"
-                    // defaultValue={props.orgId}
                     >
                         <AutocompleteInput
                             optionText="name"
-                            disabled
                         />
                     </ReferenceInput>
 
 
 
 
-                    <OrganizationInput />
                 </SimpleForm>
             </EditContextProvider>
         </div >

@@ -1,14 +1,15 @@
-import { FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import React, { FC, useState } from 'react';
 import {
-  Button, EditProps,
-  fetchUtils, required,
-  useNotify,
+  AutocompleteInput,
+  Button, DateInput, EditProps,
+  fetchUtils, ReferenceInput, required, useNotify,
   useRedirect,
   useRefresh
 } from 'react-admin';
+import { EmailKeys } from '../utils/email';
+import emailjs from 'emailjs-com';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,12 +41,13 @@ export const GenerateMasavFile: FC<EditProps> = props => {
     refresh();
   };
   const genarte = () => {
+
     try {
       // const date_agreement=15
       const httpClient = fetchUtils.fetchJson;
-      const apiUrl = `http://127.0.0.1:4000/api/agreement/${agreementDate}`;
+      const apiUrl = `http://localhost:4000/api/agreement/${agreementDate}`;
 
-      const res = httpClient(`${apiUrl}`, { method: "POST" }).then(({ json }) => (
+      const res = httpClient(`${apiUrl}`, { method: "GET" }).then(({ json }) => (
         {
           data: json,
         })
@@ -61,26 +63,31 @@ export const GenerateMasavFile: FC<EditProps> = props => {
 
   };
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault(); // Prevents default refresh by the browser
+    emailjs.sendForm(`gmail`, EmailKeys.TEMPLATE_ID, e.target, EmailKeys.USER_ID)
+      .then((result) => {
+        alert(`Message Sent, We will get back to you shortly",${result.text}`);
+      },
+        (error: Error) => {
+          alert(`An error occurred, Please try again", ${error.message}`);
+        });
+  };
+
   return (
-    <FormControl>
-
-      <TextField
-        id="date"
-        value={agreementDate}
-        onChange={e => setAgreementDate(e.target.value)}
-        label="בחר תאריך גביה"
-        type="date"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-
-      />
-      <Button color="primary" onClick={genarte} label="דוח מסב" ></Button>
-    </FormControl>
+    <>
+      <Button label="genarte" onClick={genarte} />
+      <ReferenceInput label="Post" source="post_id" reference="posts">
+        <AutocompleteInput optionText="title" />
+      </ReferenceInput>
+      <DateInput source="" />
+      {/* <form onSubmit={handleSubmit}>
+        <button type="submit">Submit</button>
+      </form> */}
+    </>
 
 
-  );
 
+  )
 };
 

@@ -17,10 +17,10 @@ import { customRoutes } from "./utils/routes";
 import themeReducer from "./utils/themeReducer";
 import users from "./users";
 import dp from './admin-props/dataProvider'
+import payments from "./payments";
 
 
 const fetchJson = (url: URL, options: any = {}) => {
-  debugger;
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }
@@ -54,10 +54,11 @@ const App = () => (
     disableTelemetry
   >
     <Resource name="organizations" {...organizations} />
-    <Resource name="projects" {...projects} />
+    <Resource name="projects"  {...projects} />
     <Resource name="customers"  {...customers} />
     <Resource name="programs" {...programs} />
     <Resource name="users" {...users} />
+    <Resource name="payments" {...payments} />
   </Admin>
 );
 

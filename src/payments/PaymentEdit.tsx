@@ -46,7 +46,7 @@ interface Props extends EditProps {
 }
 
 
-export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
+export const PaymentEdit: FC<Props> = ({ onCancel, ...props }) => {
     const classes = useStyles(props);
     const controllerProps = useEditController<Organization>(props);
     const translate = useTranslate();
@@ -72,11 +72,11 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     save={controllerProps.save}
                     version={controllerProps.version}
                     redirect="list"
-                    resource="programs"
+                    resource="payments"
                 >
                     <ProjectReferenceField />
                     <SectionTitle
-                        label={translate("resources.programs.fieldGroups.customer_details")}
+                        label={translate("resources.payments.fieldGroups.customer_details")}
                     />
                     <>
                         <OrganizationInput />
@@ -85,7 +85,7 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     </>
 
                     <SectionTitle
-                        label={translate("resources.programs.fieldGroups.collection_details")}
+                        label={translate("resources.payments.fieldGroups.collection_details")}
                     />
                     <TextInput
                         source="sum"
@@ -122,7 +122,7 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
 
 
                     <SectionTitle
-                        label={translate("resources.programs.fieldGroups.bank_account")}
+                        label={translate("resources.payments.fieldGroups.bank_account")}
                     />
 
                     <TextInput
@@ -142,7 +142,7 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     />
 
                     {/* <SectionTitle
-                        label={translate("resources.programs.fieldGroups.credit_card")}
+                        label={translate("resources.payments.fieldGroups.credit_card")}
                     />
                     <TextInput
                         source="paymentMethod.creditCard.creditNumber"

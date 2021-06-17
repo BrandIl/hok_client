@@ -4,12 +4,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { FC, Fragment, useCallback } from "react";
 import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
 import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
-import { ProgramEdit } from './ProgramEdit';
-import ProgramLListDesktop from './ProgramListDesktop';
-import ProgramFilter from './ProgramFilter';
-import { exporter } from './ProgramExporter';
+import { PaymentEdit } from './PaymentEdit';
+import PaymentLListDesktop from './PaymentListDesktop';
+import { Paymentilter } from './PaymentFilter';
+import { exporter } from './PaymentExporter';
+import { Typography } from '@material-ui/core';
+import { PaymentListActions } from './PaymentListAction';
 
-const ProgramsBulkActionButtons = (props: BulkActionProps) => (
+const PaymentsBulkActionButtons = (props: BulkActionProps) => (
     <Fragment>
         <BulkDeleteButton {...props} />
     </Fragment>
@@ -35,8 +37,26 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const Aside = (data: any) => {
 
-export const ProgramList: FC<ListProps> = props => {
+    var sum: number = 0;
+    for (var i in data.data) {
+        console.log(data.data[i].sum)
+        sum += Number.parseFloat(data.data[i].sum);
+    }
+
+    return (
+        <div style={{ width: 200, margin: '1em' }}>
+            <Typography>Post details</Typography>
+            <Typography variant="body1">
+                {sum}
+            </Typography>
+        </div>
+    )
+};
+
+
+export const PaymentList: FC<ListProps> = props => {
     const classes = useStyles();
     const isXSmall = useMediaQuery<Theme>(theme =>
         theme.breakpoints.down('xs')
@@ -44,13 +64,13 @@ export const ProgramList: FC<ListProps> = props => {
     const history = useHistory();
 
     const handleClose = useCallback(() => {
-        history.push('/programs');
+        history.push('/payments');
     }, [history]);
 
 
     return (
         <div className={classes.root}>
-            <Route path="/programs/:id">
+            <Route path="/payments/:id">
                 {({ match }: RouteChildrenProps<{ id: string }>) => {
                     const isMatch = !!(
                         match &&
@@ -66,16 +86,17 @@ export const ProgramList: FC<ListProps> = props => {
                                     [classes.listWithDrawer]: isMatch,
                                 })}
                                 exporter={exporter}
-                                bulkActionButtons={<ProgramsBulkActionButtons />}
-                                filters={<ProgramFilter />}
-                                perPage={5}
+                                bulkActionButtons={<PaymentsBulkActionButtons />}
+                                filters={<Paymentilter />}
                                 sort={{ field: 'name', order: 'DESC' }}
-                                filter={localStorage.permissions === 'admin' ? {} : { organizationId: { $in: JSON.parse(localStorage.organizations) } }}
+                                aside={<Aside />}
+                                actions={<PaymentListActions />}
                             >
                                 {isXSmall ? (
-                                    <ProgramLListDesktop />
+                                    <PaymentLListDesktop />
                                 ) : (
-                                    <ProgramLListDesktop
+                                    <PaymentLListDesktop
+                                        total={props}
                                         selectedRow={
                                             isMatch
                                                 ? parseInt(
@@ -97,7 +118,7 @@ export const ProgramList: FC<ListProps> = props => {
                             >
                                 {/* To avoid any errors if the route does not match, we don't render at all the component in this case */}
                                 {isMatch ? (
-                                    <ProgramEdit
+                                    <PaymentEdit
                                         id={(match as any).params.id}
                                         onCancel={handleClose}
                                         {...props}

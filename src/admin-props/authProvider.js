@@ -1,6 +1,7 @@
+import { isConditionalExpression } from "typescript";
+
 const authProvider = {
   login: ({ email, password }) => {
-    debugger;
     const request = new Request("http://localhost:4000/api/auth/signin", {
       method: "POST",
       body: JSON.stringify({ email, password }),
@@ -37,6 +38,8 @@ const authProvider = {
   logout: () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("permissions");
+    localStorage.removeItem("organizations");
+
     return Promise.resolve();
   },
   getIdentity: () => {
@@ -59,6 +62,12 @@ const authProvider = {
           "permissions",
           current_user.currentUser.isAdmin ? "admin" : "user"
         );
+        localStorage.setItem(
+          "organizations",
+          JSON.stringify(
+          current_user.currentUser.organizations ? current_user.currentUser.organizations : [])
+        );
+         
         const { id, name, avatar } = current_user.currentUser;
         return Promise.resolve({
           id: id,

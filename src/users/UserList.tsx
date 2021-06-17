@@ -48,8 +48,6 @@ export const UserList: FC<ListProps> = ({ permissions, ...props }) => {
                         <ChipField source="name" />
                     </SingleFieldList>
                 </ReferenceArrayField>
-                <EditButton />
-                <ShowButton />
             </Datagrid>
         </List>
     );

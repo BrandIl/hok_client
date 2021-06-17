@@ -3,10 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft } from "@material-ui/icons";
 import React, { FC } from 'react';
 import {
+  BooleanInput,
   Create,
   CreateProps,
   Datagrid,
-  ListButton, ReferenceManyField, required,
+  FormDataConsumer,
+  ListButton, ReferenceArrayInput, ReferenceManyField, required,
+  SelectArrayInput,
   ShowButton, SimpleForm,
   TextField, TextInput,
   TopToolbar, useCreateController,
@@ -16,6 +19,7 @@ import {
 } from 'react-admin';
 import { useStyles } from '../utils/styles';
 import { Organization } from '../utils/types';
+import { validateEmail, validateNames } from '../utils/validations';
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -44,30 +48,14 @@ import { Organization } from '../utils/types';
 
 const UserCreateActions = (basePath: any, data: any) => (
   <TopToolbar>
-    <ListButton basePath={basePath} label="Back" icon={<ChevronLeft />} />
+    <ListButton basePath={basePath} label="Back" />
     <ShowButton basePath={basePath} record={data} />
   </TopToolbar>
 );
 
-const Aside = (record: any) => (
-  <div style={{ width: 200, margin: "1em" }}>
-    <Typography variant="h6">Post details</Typography>
-    {record && (
-      <Typography variant="body2">Creation date: {record.name}</Typography>
-    )}
-  </div>
-);
 
 export const UserCreate: FC<CreateProps> = props => {
-  const notify = useNotify();
-  const refresh = useRefresh();
-  const redirect = useRedirect();
 
-  const onFailure = (error: Error) => {
-    notify(`Could not Create post: ${error.message}`);
-    redirect("/users");
-    refresh();
-  };
   const classes = useStyles();
   const controllerProps = useCreateController<Organization>(props);
   const translate = useTranslate();
@@ -78,27 +66,36 @@ export const UserCreate: FC<CreateProps> = props => {
 
   return (
     <Create
-      onFailure={onFailure}
-      aside={<Aside />}
       actions={<UserCreateActions />}
-      title="עדכון משתמש"
       {...props}
     >
       <SimpleForm>
-        <TextInput disabled source="name" />
-        <TextInput source="email" />
-        <TextInput source="password" />
-        <TextInput source="isAdmin" />
-        <ReferenceManyField
-          label="organizations"
+
+        <TextInput
+          variant="standard"
+          source="name"
+          validate={validateNames(2, 20)}
+        />
+        <TextInput
+          variant="standard"
+          source="email"
+          validate={validateEmail}
+        />
+
+        <BooleanInput
+          source="isAdmin"
+          validate={required()}
+        />
+
+        <ReferenceArrayInput
+          source="organizations"
           reference="organizations"
-          target="organizationId"
+
         >
-          <Datagrid>
-            <TextField source="id" />
-          </Datagrid>
-        </ReferenceManyField>
-        <TextInput source="organizations" />
+          <SelectArrayInput
+            optionText="name"
+          />
+        </ReferenceArrayInput>
       </SimpleForm>
     </Create>
   );

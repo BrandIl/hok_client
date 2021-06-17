@@ -15,14 +15,13 @@ const OrganizationReferenceField: FC<
         reference="organizations"
         {...props}
     >
-
         <TextField source="name" />
     </ReferenceField>
 );
 
 OrganizationReferenceField.defaultProps = {
 
-    source: 'OrganizationId',
+    source: 'organizationId',
     addLabel: true,
 };
 

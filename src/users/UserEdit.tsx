@@ -1,19 +1,15 @@
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ChevronLeft } from "@material-ui/icons";
 import React, { FC } from 'react';
 import {
-  Datagrid, Edit,
+  BooleanInput, Edit,
   EditProps,
-  ListButton, ReferenceManyField, required,
-  ShowButton, SimpleForm,
-  TextField, TextInput,
-  TopToolbar, useEditController,
-  useNotify,
-  useRedirect,
-  useRefresh, useTranslate
+  ListButton, ReferenceArrayInput, required,
+  SelectArrayInput,
+  ShowButton, SimpleForm, TextInput,
+  TopToolbar, useEditController, useTranslate
 } from 'react-admin';
 import { Organization } from '../utils/types';
+import { validateEmail, validateNames } from '../utils/validations';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,36 +37,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const requiredValidate = [required()];
 interface Props extends EditProps {
   onCancel?: () => void;
 }
 const UserEditActions = (basePath: any, data: any) => (
   <TopToolbar>
-    <ListButton basePath={basePath} label="Back" icon={<ChevronLeft />} />
+    <ListButton basePath={basePath} label="Back" />
     <ShowButton basePath={basePath} record={data} />
   </TopToolbar>
 );
 
-const Aside = (record: any) => (
-  <div style={{ width: 200, margin: "1em" }}>
-    <Typography variant="h6">Post details</Typography>
-    {record && (
-      <Typography variant="body2">Creation date: {record.name}</Typography>
-    )}
-  </div>
-);
+
 
 export const UserEdit: FC<Props> = ({ onCancel, ...props }) => {
-  const notify = useNotify();
-  const refresh = useRefresh();
-  const redirect = useRedirect();
 
-  const onFailure = (error: Error) => {
-    notify(`Could not edit post: ${error.message}`);
-    redirect("/users");
-    refresh();
-  };
   const classes = useStyles();
   const controllerProps = useEditController<Organization>(props);
   const translate = useTranslate();
@@ -81,27 +61,33 @@ export const UserEdit: FC<Props> = ({ onCancel, ...props }) => {
 
   return (
     <Edit
-      onFailure={onFailure}
-      aside={<Aside />}
       actions={<UserEditActions />}
-      title="עדכון משתמש"
       {...props}
     >
       <SimpleForm>
-        <TextInput disabled source="name" />
-        <TextInput source="email" />
-        <TextInput source="password" />
-        <TextInput source="isAdmin" />
-        <ReferenceManyField
-          label="organizations"
+        <TextInput
+          source="name"
+          validate={validateNames(2, 20)}
+        />
+        <TextInput
+          source="email"
+          validate={validateEmail}
+        />
+        <ReferenceArrayInput
+          source="organizations"
           reference="organizations"
-          target="post_id"
+
         >
-          <Datagrid>
-            <TextField source="id" />
-          </Datagrid>
-        </ReferenceManyField>
-        <TextInput source="organizations" />
+          <SelectArrayInput
+            optionText="name"
+          />
+        </ReferenceArrayInput>
+
+        <BooleanInput
+          source="isAdmin"
+          validate={required()}
+        />
+
       </SimpleForm>
     </Edit>
   );

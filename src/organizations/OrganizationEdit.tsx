@@ -190,7 +190,7 @@ export const OrganizationEdit: FC<Props> = ({ onCancel, ...props }) => {
                             variant="standard"
                             validate={validateDigits(6, 6)}
                         />
-                        <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
+                        {/* <SectionTitle label={translate('resources.organizations.titles.cerdit_card')} />
 
                         <TextInput
                             source="paymentAgreement.paymentMethod.creditCard.creditNumber"
@@ -210,7 +210,7 @@ export const OrganizationEdit: FC<Props> = ({ onCancel, ...props }) => {
                             formClassName={classes.inlineField}
                             variant="standard"
                             validate={validateDigits(3, 3)}
-                        />
+                        /> */}
                     </FormTab>
                     <FormTab label={translate('resources.organizations.titles.payment_method')}>
                         <SectionTitle label={translate('resources.organizations.titles.payment')} />

@@ -70,6 +70,9 @@ export const ProjectList: FC<ListProps> = props => {
                                 filters={<ProjectFilter />}
                                 perPage={5}
                                 sort={{ field: 'name', order: 'DESC' }}
+                                filter={localStorage.permissions === 'admin' ? {} : { organizationId: { $in: JSON.parse(localStorage.organizations) } }}
+
+
                             >
                                 {isXSmall ? (
                                     <ProjectListDesktop />

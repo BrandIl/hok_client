@@ -11,7 +11,6 @@ import { validateNames } from '../utils/validations';
 import { ProjectCreateActions } from './ProjectCreateActions';
 
 export const ProjectCreate: FC<CreateProps> = props => {
-    debugger;
     const classes = useStyles(props);
     const translate = useTranslate();
 

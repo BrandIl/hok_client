@@ -47,12 +47,6 @@ export interface Organization extends Record {
                 branchId: number
                 accountNumber: string;
             }
-            ;
-            creditCard: {
-                creditNumber: number;
-                expiringDate: string;
-                cvv2: string;
-            };
         }
     };
 }
@@ -74,16 +68,31 @@ export interface Program extends Record {
             branchId: string;
             accountNumber: string;
         }
-        creditCard: {
-            creditNumber: number;
-            expiringDate: string;
-            cvv2: string;
-        }
     },
     organizationId: Identifier,
     projectId: Identifier,
     customerId: Identifier
 }
+
+export interface Payment extends Record {
+    sum: string;
+    startDate: Date;
+    endDate: Date;
+    numOfPayments: number;
+    launchDay: number,
+    paymentMethod: {
+        bankAccount: {
+            bankId: string;
+            branchId: string;
+            accountNumber: string;
+        }
+    },
+    organizationId: Identifier,
+    projectId: Identifier,
+    customerId: Identifier,
+    programId: Identifier,
+}
+
 
 export interface Customer extends Record {
     firstName: string;
@@ -106,4 +115,5 @@ export interface Customer extends Record {
     }
     organizationId: Identifier;
 }
+
 

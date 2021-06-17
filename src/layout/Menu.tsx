@@ -13,6 +13,7 @@ import users from '../users';
 import organizations from '../organizations';
 import projects from '../projects';
 import customers from '../customers';
+import payments from '../payments';
 
 const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
 
@@ -55,6 +56,14 @@ const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
                 to={`/programs`}
                 primaryText={translate('pos.menu.programs')}
                 leftIcon={<programs.icon />}
+                onClick={onMenuClick}
+                sidebarIsOpen={open}
+                dense={dense}
+            />
+            <MenuItemLink
+                to={`/payments`}
+                primaryText={translate('pos.menu.payments')}
+                leftIcon={<payments.icon />}
                 onClick={onMenuClick}
                 sidebarIsOpen={open}
                 dense={dense}

@@ -33,6 +33,7 @@ const customFrenchMessages: TranslationMessages = {
             customers: 'לקוחות',
             programs: 'תוכניות',
             projects: 'פרויקטים',
+            payments: 'תשלומים',
             dashboard: 'תפריט ראשי',
             reports: 'דוחות',
             configurations: 'הגדרות'
@@ -120,9 +121,7 @@ const customFrenchMessages: TranslationMessages = {
         projects: {
             name: 'פרויקט |||| פרויקטים',
             fields: {
-                organizationId: {
-                    name: 'מוסד'
-                },
+                organizationId: 'מוסד',
                 name: 'שם פרויקט',
             },
             titles: {
@@ -136,31 +135,57 @@ const customFrenchMessages: TranslationMessages = {
                 save_error: '!שגיאה',
             },
         },
+        payments: {
+            name: 'תשלום |||| תשלומים',
+            fields: {
+                organizationId: 'מוסד',
+                name: 'שם פרויקט',
+                sum: 'סכום לגביה',
+                startDate: 'תאריך פתיחה',
+                endDate: 'תאריך סיום',
+                numOfPayments: 'מספר תשלומים',
+                launchDay: 'יום גביה',
+                paymentMethod: {
+                    bankAccount: {
+                        bankId: 'מזהה בנק',
+                        branchId: 'מספר סניף',
+                        accountNumber: 'מספר חשבון',
+                    }
+                },
+                projectId: 'פרויקט',
+                customerId: 'שם לקוח',
+            },
+            filter: {
+
+            }
+        },
         customers: {
             name: 'לקוח |||| לקוחות',
             fields: {
                 firstName: 'שם פרטי',
                 lastName: 'שם משפחה',
                 identity: 'מספר זהות',
-                address: {
-                    city: {
-                        name: 'עיר',
-                        zip: 'מיקוד',
-                    },
-                    street: {
-                        name: 'רחוב',
-                        number: 'מספר רחוב',
-                    }
-                },
+
                 communication: {
+                    address: {
+                        city: {
+                            name: 'עיר',
+                            zip: 'מיקוד',
+                        },
+                        street: {
+                            name: 'רחוב',
+                            number: 'מספר רחוב',
+                        }
+                    },
                     email: 'כתובת מייל',
                     celular: 'נייד',
+                    remarks: 'הערות'
 
                 },
                 organizationId: 'מוסד',
             },
             filters: {
-
+                projectId: "פרויקט"
             },
             fieldGroups: {
                 personal_details: 'פרטים אישיים',
@@ -185,15 +210,11 @@ const customFrenchMessages: TranslationMessages = {
             name: 'משתמש |||| משתמשים',
             title: 'משתמשים°%{reference}',
             fields: {
-                name: 'Adresse',
-                mail: 'Client',
-                password: 'Emises depuis',
-                permission: 'Emises avant',
-                nb_items: 'Nb articles',
-                reference: 'Référence',
-                returned: 'Annulée',
-                status: 'Etat',
-                total_gte: 'Montant minimum',
+                name: 'שם משתמש',
+                email: 'מייל',
+                password: 'סיסמא',
+                isAdmin: 'מנהל מערכת?',
+                organizations: 'מוסדות',
             },
             section: {
                 order: 'Commande',
@@ -207,7 +228,7 @@ const customFrenchMessages: TranslationMessages = {
             name: 'תוכנית |||| תוכניות',
             fields: {
                 sum: 'סכום לגביה',
-                startDate: 'תאריך התחלה',
+                startDate: 'תאריך פתיחה',
                 endDate: 'תאריך סיום',
                 numOfPayments: 'מספר תשלומים',
                 launchDay: 'יום גביה',
@@ -258,6 +279,24 @@ const customFrenchMessages: TranslationMessages = {
                 collection_details: 'פרטי גביה',
                 bank_account: 'חשבון בנק',
                 credit_card: 'כרטיס אשראי'
+            },
+        },
+        reports: {
+            name: 'דוח |||| דוחות',
+            fields: {
+                masav_report: 'דוח מס"ב',
+                name: 'שם פרויקט',
+            },
+
+            titles: {
+                create: 'הוספת פרויקט',
+                edit: 'עריכת פרויקט',
+                show: '*****',
+            },
+            notifications: {
+                create_success: '!הפרויקט נוצר בהצלחה',
+                edit_success: 'הפרויקט השתנה בהצלחה!',
+                save_error: '!שגיאה',
             },
         },
     }
