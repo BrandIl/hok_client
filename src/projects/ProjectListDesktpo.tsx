@@ -13,6 +13,7 @@ const useListStyles = makeStyles({
         borderLeftColor: 'transparent',
         borderLeftWidth: 5,
         borderLeftStyle: 'solid',
+        marginLeft: 200
     },
     headerCell: {
         padding: '6px 8px 6px 8px',
@@ -34,6 +35,7 @@ const ProjectListDesktop: FC<ProjectListDesktopProps> = ({
     const classes = useListStyles();
     return (
         <Datagrid
+            style={{ tableLayout: 'fixed' }}
             rowClick="edit"
             // @ts-ignore
             rowStyle={rowStyle(selectedRow)}
@@ -45,8 +47,9 @@ const ProjectListDesktop: FC<ProjectListDesktopProps> = ({
             optimized
             {...props}
         >
-            <TextField source="name" />
+            <TextField source="ordinalNumber" />
             <OrganizationReferenceField />
+            <TextField source="name" />
 
         </Datagrid >
     );

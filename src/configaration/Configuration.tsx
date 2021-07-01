@@ -2,15 +2,23 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import * as React from 'react';
-import { SaveButton, Title, useLocale, useSetLocale, useTranslate } from 'react-admin';
+import { useCallback } from 'react';
+import { Title, useLocale, useSetLocale, useTranslate, TopToolbar } from 'react-admin';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { AppState } from '../utils/types';
 import { changeTheme } from './actions';
+
+
+
+
 
 const useStyles = makeStyles({
     label: { width: '10em', display: 'inline-block' },
     button: { margin: '1em' },
+    card: { width: 50 }
 });
 
 const Configuration = () => {
@@ -20,8 +28,22 @@ const Configuration = () => {
     const classes = useStyles();
     const theme = useSelector((state: AppState) => state.theme);
     const dispatch = useDispatch();
+
+
+    const history = useHistory();
+
+    const handleClose = useCallback(() => {
+        history.push('/');
+    }, [history]);
+
     return (
         <Card>
+            <TopToolbar>
+                <Button onClick={handleClose}>
+                    <CloseIcon />
+                </Button>
+            </TopToolbar>
+
             <Title title={translate('pos.configuration')} />
             <CardContent>
                 <div className={classes.label}>
@@ -63,6 +85,7 @@ const Configuration = () => {
                     heb
                 </Button>
             </CardContent>
+
 
         </Card>
     );

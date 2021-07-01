@@ -1,9 +1,9 @@
 import React from 'react';
-import { useTranslate, required, ReferenceInput, SelectInput } from 'react-admin';
+import { AutocompleteInput, ReferenceInput, useTranslate } from 'react-admin';
 import { useFormState } from 'react-final-form';
 import { useStyles } from '../utils/styles';
 
-export const ProjectInput = () => {
+export const ProjectFiltertInput = () => {
     const { values } = useFormState();
     const translate = useTranslate();
     const classes = useStyles();
@@ -18,10 +18,12 @@ export const ProjectInput = () => {
             filter={{ organizationId: values.organizationId }}
             disabled={!values.organizationId}
             variant="standard"
+            filterToQuery={searchText => (searchText ? { name: searchText } : {})}
         >
-            <SelectInput
+            <AutocompleteInput
                 optionText="name"
-                validate={required()} />
+                resettable
+            />
         </ReferenceInput>
     );
 }

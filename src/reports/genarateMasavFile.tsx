@@ -77,10 +77,10 @@ export const GenerateMasavFile: FC<EditProps> = props => {
   return (
     <>
       <Button label="genarte" onClick={genarte} />
-      <ReferenceInput label="Post" source="post_id" reference="posts">
+      {/* <ReferenceInput label="Post" source="post_id" reference="posts">
         <AutocompleteInput optionText="title" />
-      </ReferenceInput>
-      <DateInput source="" />
+      </ReferenceInput> */}
+      {/* <DateInput source="" /> */}
       {/* <form onSubmit={handleSubmit}>
         <button type="submit">Submit</button>
       </form> */}

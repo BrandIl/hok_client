@@ -12,5 +12,5 @@ export const validateDigits = (min: number, max: number) => {
     return [required(),
     regex(/^[0-9]+$/, translate('pos.validations.digits')), minLength(min), maxLength(max)]
 }
-export const validatePrice = [required(), minValue(1), number()]
+export const validatePrice = [required(), minValue(0.01), number()]
 export const expiringDate = [required()]

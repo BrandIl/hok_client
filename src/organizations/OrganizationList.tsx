@@ -68,7 +68,6 @@ export const OrganizationsList: FC<ListProps> = props => {
                                 exporter={OrganizationExporter}
                                 bulkActionButtons={<OrganizationsBulkActionButtons />}
                                 filters={<OrganizationFilter />}
-                                perPage={5}
                                 sort={{ field: 'name', order: 'DESC' }}
                             >
                                 {isXSmall ? (

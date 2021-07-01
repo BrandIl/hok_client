@@ -5,6 +5,8 @@ import {
     Datagrid,
     TextField,
     DatagridProps,
+    FunctionField,
+    useTranslate
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -39,6 +41,8 @@ const OrganizationListDesktop: FC<OrganizationListDesktopProps> = ({
     ...props
 }) => {
     const classes = useListStyles();
+    const translate = useTranslate();
+
     return (
         <Datagrid
             rowClick="edit"
@@ -53,10 +57,19 @@ const OrganizationListDesktop: FC<OrganizationListDesktopProps> = ({
             {...props}
         >
             <TextField source="name" />
+            <TextField source="masavData.charge.codeNosse" cellClassName={classes.comment} />
+            <TextField source="communication.address.city.name" cellClassName={classes.comment} />
+            <FunctionField
+                label={translate("resources.organizations.fields.communication.address.street.name")}
+                render={(record: any) => {
+                    return `${record.communication.address.street.name} `
+                        + `${record.communication.address.street.number}`
+                }}
+            />
+            <TextField source="communication.concats.name" cellClassName={classes.comment} />
             <TextField source="communication.concats.email" cellClassName={classes.comment} />
             <TextField source="communication.concats.celular" cellClassName={classes.comment} />
-            <TextField source="communication.concats.name" cellClassName={classes.comment} />
-            <TextField source="communication.concats.remarks" cellClassName={classes.comment} />
+
         </Datagrid>
     );
 };

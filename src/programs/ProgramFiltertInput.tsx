@@ -1,32 +1,33 @@
 import React from 'react';
-import { ReferenceInput, required, SelectInput, useTranslate } from 'react-admin';
+import { ReferenceInput, SelectInput, useTranslate } from 'react-admin';
 import { useFormState } from 'react-final-form';
 import { useStyles } from '../utils/styles';
-import { Customer } from '../utils/types';
+import { Customer, Program } from '../utils/types';
 
-export const CustomerInput = () => {
+export const ProgramFiltertInput = () => {
     const { values } = useFormState();
     const translate = useTranslate();
     const classes = useStyles();
 
     return (
+
         <ReferenceInput
-            label={translate("resources.customers.name", { smart_count: 1 })}
+            label={translate("resources.programs.name", { smart_count: 1 })}
             className={classes.formDataConsumerInput}
-            source="customerId"
-            reference="customers"
+            source="programId"
+            reference="programs"
             filter={{ organizationId: values.organizationId }}
             disabled={!values.organizationId}
             variant="standard"
         >
-
             <SelectInput
-                optionText={(choice?: Customer) =>
+                optionText={(choice?: Program) =>
                     choice?.id // the empty choice is { id: '' }
-                        ? `${choice.firstName} ${choice.lastName}`
+                        ? `${choice.ordinalNumber} `
                         : ''
                 }
-                validate={required()} />
+                resettable
+            />
         </ReferenceInput>
     );
 }

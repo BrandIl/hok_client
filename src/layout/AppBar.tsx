@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import SettingsIcon from '@material-ui/icons/Settings';
 import * as React from 'react';
 import { forwardRef } from 'react';
-import { AppBar, MenuItemLink, UserMenu, useTranslate } from 'react-admin';
+import { AppBar, Link, MenuItemLink, UserMenu, useTranslate } from 'react-admin';
 
 
 const useStyles = makeStyles({
@@ -21,21 +21,28 @@ const useStyles = makeStyles({
 const ConfigurationMenu = forwardRef<any, any>((props, ref) => {
     const translate = useTranslate();
     return (
-        <MenuItemLink
-            ref={ref}
-            to="/configuration"
-            primaryText={translate('pos.configuration')}
-            leftIcon={<SettingsIcon />}
-            onClick={props.onClick}
-            sidebarIsOpen
-        />
+        <>
+            <MenuItemLink
+                ref={ref}
+                to="/configuration"
+                primaryText={translate('pos.configuration')}
+                leftIcon={<SettingsIcon />}
+                onClick={props.onClick}
+                sidebarIsOpen
+            />
+        </>
     );
 });
 
 const CustomUserMenu = (props: any) => (
-    <UserMenu {...props}>
-        <ConfigurationMenu />
-    </UserMenu>
+    <>
+
+        <UserMenu {...props} >
+            <ConfigurationMenu />
+        </UserMenu>
+
+    </>
+
 );
 
 const CustomAppBar = (props: any) => {

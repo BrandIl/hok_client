@@ -1,25 +1,55 @@
-import { downloadCSV, useTranslate } from 'react-admin';
 import jsonExport from 'jsonexport/dist';
-import { Organization } from '../utils/types';
+import { downloadCSV } from 'react-admin';
+import { Payment } from '../utils/types';
 
 
-export const exporter = (organizations: Organization[]) => {
+export const PaymentExporter = (records: Payment[], fetchRelatedRecords: any) => {
+    fetchRelatedRecords(records, 'organizationId', 'organizations').then((organizations: any) => {
+        fetchRelatedRecords(records, 'projectId', 'projects').then((projects: any) => {
+            fetchRelatedRecords(records, 'customerId', 'customers').then((customers: any) => {
+                fetchRelatedRecords(records, 'programId', 'programs').then((programs: any) => {
 
 
-    const programsForExport = organizations.map((organization: Organization) => {
+                    const programsForExport = records.map(program => {
+                        const { id, __v, ...programsForExport } = program; // omit backlinks and author
+                        return programsForExport;
+                    });
 
-        const { ...programsForExport } = organization; // omit backlinks and author
-        // organizationsForExport.author_name = organization.author; // add a field
-        return programsForExport;
-    });
+                    const data = programsForExport.map(record => ({
+                        ...record,
+                        organizationId: organizations[record.organizationId].name,
+                        projectId: projects[record.projectId].name,
+                        customerId: `${customers[record.customerId].lastName}  ${customers[record.customerId].firstName}`,
+                        identity: customers[record.customerId].identity as string
+                    }));
 
 
-    jsonExport(programsForExport, {
-        // headers: ['שם', 'איש קשר', 'טלפון', 'מייל'], // order fields in the export
-        rename: ['שם', 'איש קשר', 'טלפון', 'מייל'],
 
-    }, (err: Error, csv: any) => {
-        downloadCSV(`\ufeff'${csv}`, 'programs'); // download as 'posts.csv` file
+                    jsonExport(data, {
+                        headers: [
+                            'organizationId',
+                            'projectId',
+                            'customerId',
+                            'identity',
+                            'sum',
+                            'startDate',
+                            'endDate',
+                            'numOfPayments',
+                            'launchDay',
+                            'paymentMethod.bankAccount.bankId',
+                            'paymentMethod.bankAccount.branchId',
+                            'paymentMethod.bankAccount.accountNumber',
+                            'status'
+                        ], // order fields in the export
+                        rename: ['שם מוסד', 'שם פרטי', 'שם משפחה', 'מספר זהות', 'סכום', 'תאריך פתיחה', 'תאריך סיום', 'מספר תשלומים', 'יום גביה', 'מזהה בנק', 'מספר סניף', 'מספר חשבון', 'פעיל?'],
+
+                    }, (err: Error, csv: any) => {
+                        downloadCSV(`\ufeff'${csv}`, 'programs'); // download as 'programs.csv` file
+                    });
+                });
+            });
+
+        });
     });
 
 };

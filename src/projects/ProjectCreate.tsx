@@ -26,6 +26,7 @@ export const ProjectCreate: FC<CreateProps> = props => {
                     source="name"
                     validate={validateNames(2, 15)}
                     formClassName={classes.formInput}
+                    variant="standard"
                 />
             </SimpleForm>
         </Create>

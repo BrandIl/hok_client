@@ -3,7 +3,6 @@ import { FC } from "react";
 import { ResourceComponentProps } from "react-admin";
 import { TryEmail } from '../utils/TryEmail';
 import GenerateCharges from "./GenerateCharges";
-import GenerateCredits from "./GenerateCredits";
 import OrganizationsListDashboard from "./OrganizationsListDashboard";
 import Welcome from "./Welcome";
 
@@ -33,12 +32,7 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
                 <Welcome />
                 {
                     permissions === 'admin' &&
-                    <div>
-                        <GenerateCharges />
-                        <VerticalSpacer />
-                        <GenerateCredits />
-                        <VerticalSpacer />
-                    </div>
+                    <GenerateCharges />
                 }
                 <OrganizationsListDashboard />
             </div>
@@ -50,12 +44,9 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
             </div>
             {
                 permissions === 'admin' &&
-                <div style={styles.singleCol}>
-                    <GenerateCharges />
-                    <Spacer />
-                    <GenerateCredits />
-                </div>
+                <GenerateCharges />
             }
+            <OrganizationsListDashboard />
             <div style={styles.singleCol}>
                 <OrganizationsListDashboard />
             </div>
@@ -63,6 +54,7 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
     ) : (
         <>
             <Welcome />
+
             <TryEmail />
             <div style={styles.flex}>
                 <div style={styles.leftCol}>
@@ -70,8 +62,6 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
                         permissions === 'admin' &&
                         <div style={styles.flex}>
                             <GenerateCharges />
-                            <Spacer />
-                            <GenerateCredits />
                         </div>
                     }
                     <div style={styles.singleCol}>

@@ -1,4 +1,3 @@
-import { isConditionalExpression } from "typescript";
 
 const authProvider = {
   login: ({ email, password }) => {

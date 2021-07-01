@@ -1,15 +1,15 @@
+import { IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
-  BooleanInput, Edit,
-  EditProps,
-  ListButton, ReferenceArrayInput, required,
-  SelectArrayInput,
-  ShowButton, SimpleForm, TextInput,
-  TopToolbar, useEditController, useTranslate
+  BooleanInput,
+  EditContextProvider, EditProps, ReferenceArrayInput, required, SelectArrayInput, SimpleForm, TextInput,
+  useEditController, useTranslate
 } from 'react-admin';
-import { Organization } from '../utils/types';
+import { Customer, User } from '../utils/types';
 import { validateEmail, validateNames } from '../utils/validations';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,77 +19,94 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    margin: '3em',
+    margin: '1em',
   },
   form: {
     [theme.breakpoints.up('xs')]: {
-      width: 400,
+      width: 600,
     },
     [theme.breakpoints.down('xs')]: {
       width: '100vw',
       marginTop: -30,
     },
   },
-  inlineField: {
+  formInput: {
     display: 'inline-block',
-    width: '100%',
+    marginInlineEnd: 20,
   },
 }));
 
-
 interface Props extends EditProps {
-  onCancel?: () => void;
+  onCancel: () => void;
 }
-const UserEditActions = (basePath: any, data: any) => (
-  <TopToolbar>
-    <ListButton basePath={basePath} label="Back" />
-    <ShowButton basePath={basePath} record={data} />
-  </TopToolbar>
-);
 
 
 
 export const UserEdit: FC<Props> = ({ onCancel, ...props }) => {
-
-  const classes = useStyles();
-  const controllerProps = useEditController<Organization>(props);
+  const classes = useStyles(props);
+  const controllerProps = useEditController<User>(props);
   const translate = useTranslate();
+
   if (!controllerProps.record) {
     return null;
   }
-
-
   return (
-    <Edit
-      actions={<UserEditActions />}
-      {...props}
-    >
-      <SimpleForm>
-        <TextInput
-          source="name"
-          validate={validateNames(2, 20)}
-        />
-        <TextInput
-          source="email"
-          validate={validateEmail}
-        />
-        <ReferenceArrayInput
-          source="organizations"
-          reference="organizations"
-
+    <div className={classes.root}>
+      <div className={classes.title}>
+        <Typography variant="h6">
+          {translate('resources.users.details')}
+        </Typography>
+        <IconButton onClick={onCancel}>
+          <CloseIcon />
+        </IconButton>
+      </div>
+      <EditContextProvider value={controllerProps}>
+        <SimpleForm
+          className={classes.form}
+          basePath={controllerProps.basePath}
+          record={controllerProps.record}
+          save={controllerProps.save}
+          version={controllerProps.version}
+          redirect="list"
+          resource="users"
         >
-          <SelectArrayInput
-            optionText="name"
+          <TextInput
+            source="name"
+            formClassName={classes.formInput}
+            validate={validateNames(2, 20)}
+            variant="standard"
           />
-        </ReferenceArrayInput>
+          <TextInput
+            source="email"
+            validate={validateEmail}
+            variant="standard"
 
-        <BooleanInput
-          source="isAdmin"
-          validate={required()}
-        />
+          />
+          <ReferenceArrayInput
+            source="organizations"
+            reference="organizations"
+            variant="standard"
 
-      </SimpleForm>
-    </Edit>
+
+          >
+            <SelectArrayInput
+              optionText="name"
+              variant="standard"
+
+            />
+          </ReferenceArrayInput>
+
+          <BooleanInput
+            source="isAdmin"
+            validate={required()}
+            variant="standard"
+
+          />
+
+        </SimpleForm>
+      </EditContextProvider>
+    </div >
   );
 };
+
 

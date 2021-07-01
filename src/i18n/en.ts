@@ -42,6 +42,7 @@ const customEnglishMessages: TranslationMessages = {
             projects: 'projects',
             dashboard: 'dashboard',
             reports: 'reports',
+            payments: 'payments',
             configurations: 'configurations'
         },
     },

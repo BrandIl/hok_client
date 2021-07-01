@@ -14,6 +14,7 @@ import organizations from '../organizations';
 import projects from '../projects';
 import customers from '../customers';
 import payments from '../payments';
+import authProvider from '../admin-props/authProvider';
 
 const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
 
@@ -68,23 +69,24 @@ const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
                 sidebarIsOpen={open}
                 dense={dense}
             />
-            <MenuItemLink
+            {/* <MenuItemLink
                 to={`/agreement`}
                 primaryText={translate('pos.menu.reports')}
                 leftIcon={<programs.icon />}
                 onClick={onMenuClick}
                 sidebarIsOpen={open}
                 dense={dense}
-            />
-            <MenuItemLink
-                to={`/users`}
-                primaryText={translate('pos.menu.users')}
-                leftIcon={<users.icon />}
-                onClick={onMenuClick}
-                sidebarIsOpen={open}
-                dense={dense}
-            />
-
+            /> */}
+            {localStorage.getItem("permissions") === 'admin' &&
+                <MenuItemLink
+                    to={`/users`}
+                    primaryText={translate('pos.menu.users')}
+                    leftIcon={<users.icon />}
+                    onClick={onMenuClick}
+                    sidebarIsOpen={open}
+                    dense={dense}
+                />
+            }
             {isXSmall && (
                 <MenuItemLink
                     to="/configuration"

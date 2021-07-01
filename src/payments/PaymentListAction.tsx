@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cloneElement, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import {
     useListContext,
     TopToolbar,
@@ -9,7 +9,9 @@ import {
     Button,
     sanitizeListRestProps,
 } from 'react-admin';
-import IconEvent from '@material-ui/icons/Event';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import { genarte } from './SendByMailPayments';
+import { stringify } from 'query-string';
 
 export const PaymentListActions = (props: any) => {
     const {
@@ -40,6 +42,27 @@ export const PaymentListActions = (props: any) => {
                 context: 'button',
             })}
             <CreateButton basePath={basePath} />
+            <Button
+                onClick={() => { genarte(filterValues) }}
+                label="שלח במייל"
+            >
+                <MailOutlineIcon />
+            </Button>
+
+            <Button
+                disabled={total === 0}
+                resource={resource}
+
+                // onClick={() => { genarte(filterValues) }}
+                label="הורד PDF"
+                href={`http://localhost:4000/api/reports?${stringify(filterValues)}`}
+            >
+
+                <PictureAsPdfOutlinedIcon />
+
+            </Button>
+
+
             <ExportButton
                 disabled={total === 0}
                 resource={resource}
@@ -48,12 +71,7 @@ export const PaymentListActions = (props: any) => {
                 maxResults={maxResults}
             />
             {/* Add your custom actions */}
-            <Button
-                onClick={() => { alert('Your custom action'); }}
-                label="Send report in Email"
-            >
-                <IconEvent />
-            </Button>
+
         </TopToolbar>
     );
 };

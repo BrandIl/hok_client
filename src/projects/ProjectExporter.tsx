@@ -1,23 +1,32 @@
-import { downloadCSV, useTranslate } from 'react-admin';
 import jsonExport from 'jsonexport/dist';
+import { downloadCSV } from 'react-admin';
 import { Project } from '../utils/types';
 
 
-export const ProjectExporter = (projects: Project[]) => {
+export const ProjectExporter = (records: Project[], fetchRelatedRecords: any) => {
+
+    fetchRelatedRecords(records, 'organizationId', 'organizations').then((organizations: any) => {
+
+        const projectsForExport = records.map(project => {
+            const { id, __v, ...projectsForExport } = project; // omit backlinks and author
+            return projectsForExport;
+        });
+
+        const data = projectsForExport.map(record => ({
+            ...record,
+            organizationId: organizations[record.organizationId].name
+        }));
 
 
-    const projectsForExport = projects.map((project: Project) => {
 
-        const { ...projectsForExport } = project; // omit backlinks and author
-        // projectsForExport.author_name = project.author; // add a field
-        return projectsForExport;
+        jsonExport(data, {
+            headers: ['organizationId', 'name'], // order fields in the export
+            rename: ['שם מוסד', 'שם פרויקט'],
+
+        }, (err: Error, csv: any) => {
+            downloadCSV(`\ufeff'${csv}`, 'projects'); // download as 'projects.csv` file
+        });
     });
-    jsonExport(projectsForExport, {
-        // headers: ['שם', 'איש קשר', 'טלפון', 'מייל'], // order fields in the export
-        rename: ['שם', 'איש קשר', 'טלפון', 'מייל'],
 
-    }, (err: Error, csv: any) => {
-        downloadCSV(`\ufeff'${csv}`, 'projects'); // download as 'posts.csv` file
-    });
 
 };

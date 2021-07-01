@@ -8,10 +8,17 @@ import { ProgramEdit } from './ProgramEdit';
 import ProgramLListDesktop from './ProgramListDesktop';
 import ProgramFilter from './ProgramFilter';
 import { exporter } from './ProgramExporter';
+import BulkActiveButton from './BulkActiveButton';
+import BulkCancelButton from './BulkCancelButton';
 
 const ProgramsBulkActionButtons = (props: BulkActionProps) => (
     <Fragment>
+
         <BulkDeleteButton {...props} />
+        <BulkActiveButton {...props} />
+        <BulkCancelButton {...props} />
+
+
     </Fragment>
 );
 
@@ -68,7 +75,6 @@ export const ProgramList: FC<ListProps> = props => {
                                 exporter={exporter}
                                 bulkActionButtons={<ProgramsBulkActionButtons />}
                                 filters={<ProgramFilter />}
-                                perPage={5}
                                 sort={{ field: 'name', order: 'DESC' }}
                                 filter={localStorage.permissions === 'admin' ? {} : { organizationId: { $in: JSON.parse(localStorage.organizations) } }}
                             >

@@ -3,7 +3,15 @@ import { TranslationMessages } from 'react-admin';
 
 const customFrenchMessages: TranslationMessages = {
     ...HebrewMessages,
+    ra: {
+        ...HebrewMessages.ra,
+        navigation: {
+            ...HebrewMessages.ra.navigation,
+            skip_nav: 'עבור'
+        }
+    },
     pos: {
+        save: 'שמור',
         search: 'חיפוש',
         configuration: 'הגדרות',
         language: 'שפה',
@@ -79,19 +87,12 @@ const customFrenchMessages: TranslationMessages = {
                 paymentAgreement: {
                     minPrice: 'מחיר מינימום',
                     feePerUnit: 'מחיר ליחידה',
-                    dayOfCharge: 'יום גביה',
                     paymentMethod: {
                         bankAccount: {
                             bankId: 'מזהה בנק',
                             branchId: 'מספר סניף',
                             accountNumber: 'מספר חשבון',
                         }
-                        ,
-                        creditCard: {
-                            creditNumber: 'מספר כרטיס',
-                            expiringDate: 'תוקף',
-                            cvv2: 'cvv',
-                        },
                     }
                 }
             },
@@ -121,6 +122,7 @@ const customFrenchMessages: TranslationMessages = {
         projects: {
             name: 'פרויקט |||| פרויקטים',
             fields: {
+                ordinalNumber: 'מספר פרויקט',
                 organizationId: 'מוסד',
                 name: 'שם פרויקט',
             },
@@ -134,6 +136,7 @@ const customFrenchMessages: TranslationMessages = {
                 edit_success: 'הפרויקט השתנה בהצלחה!',
                 save_error: '!שגיאה',
             },
+            details: 'פרטי פרויקט'
         },
         payments: {
             name: 'תשלום |||| תשלומים',
@@ -152,8 +155,11 @@ const customFrenchMessages: TranslationMessages = {
                         accountNumber: 'מספר חשבון',
                     }
                 },
+                status: 'מצב',
                 projectId: 'פרויקט',
                 customerId: 'שם לקוח',
+                programId: 'מספר תוכנית',
+
             },
             filter: {
 
@@ -162,6 +168,7 @@ const customFrenchMessages: TranslationMessages = {
         customers: {
             name: 'לקוח |||| לקוחות',
             fields: {
+                ordinalNumber: 'מספר לקוח',
                 firstName: 'שם פרטי',
                 lastName: 'שם משפחה',
                 identity: 'מספר זהות',
@@ -187,6 +194,7 @@ const customFrenchMessages: TranslationMessages = {
             filters: {
                 projectId: "פרויקט"
             },
+            details: 'פרטי לקוח',
             fieldGroups: {
                 personal_details: 'פרטים אישיים',
                 address: 'כתובת',
@@ -216,17 +224,13 @@ const customFrenchMessages: TranslationMessages = {
                 isAdmin: 'מנהל מערכת?',
                 organizations: 'מוסדות',
             },
-            section: {
-                order: 'Commande',
-                customer: 'Client',
-                shipping_address: 'Adresse de livraison',
-                items: 'Articles',
-                total: 'Total',
-            },
+            details: 'פרטי משתמש'
+
         },
         programs: {
             name: 'תוכנית |||| תוכניות',
             fields: {
+                ordinalNumber: 'מספר תוכנית',
                 sum: 'סכום לגביה',
                 startDate: 'תאריך פתיחה',
                 endDate: 'תאריך סיום',
@@ -238,16 +242,11 @@ const customFrenchMessages: TranslationMessages = {
                         branchId: 'מספר סניף',
                         accountNumber: 'מספר חשבון',
                     }
-                    ,
-                    creditCard: {
-                        creditNumber: 'מספר כרטיס',
-                        expiringDate: 'תוקף',
-                        cvv2: 'cvv',
-                    },
                 },
                 organizationId: 'מוסד',
                 projectId: 'פרויקט',
                 customerId: 'לקוח',
+                isActive: 'פעיל'
 
             },
             titles: {
@@ -257,22 +256,21 @@ const customFrenchMessages: TranslationMessages = {
                 reviews: 'Commentaires',
             },
             filters: {
-                categories: 'Catégories',
-                stock: 'Stock',
-                no_stock: 'En rupture',
-                low_stock: '1 - 9 unités',
-                average_stock: '10 - 49 unités',
-                enough_stock: '50 unités et plus',
-                sales: 'Ventes',
-                best_sellers: 'Meilleures ventes',
-                average_sellers: 'Moyennes',
-                low_sellers: 'Peu vendu',
-                never_sold: 'Jamais vendu',
+                active: 'פעיל',
+                cancel: 'מבוטל'
             },
             notifications: {
                 create_success: '!התכנית נוצרה בהצלחה',
                 edit_success: 'התכנית התעדכנה בהצלחה!',
                 save_error: '!שגיאה',
+                cancel_success: 'התכניות בוטלו בהצלחה',
+                cancel_error: 'ארעה שגיאה!\n נסה שוב ',
+                active_success: 'התכנית הופעלה בהצלחה',
+                active_error: 'ארעה שגיאה!\n נסה שוב ',
+            },
+            action: {
+                active: 'חדש',
+                cancel: 'בטל',
             },
             fieldGroups: {
                 customer_details: 'פרטי תכנית',

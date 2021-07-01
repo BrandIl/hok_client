@@ -1,15 +1,14 @@
 import { Drawer, Theme, useMediaQuery } from '@material-ui/core';
-import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
+import classnames from 'classnames';
 import React, { FC, Fragment, useCallback } from "react";
 import { BulkActionProps, BulkDeleteButton, List, ListProps } from "react-admin";
 import { Route, RouteChildrenProps, useHistory } from "react-router-dom";
 import { PaymentEdit } from './PaymentEdit';
-import PaymentLListDesktop from './PaymentListDesktop';
+import { PaymentExporter } from './PaymentExporter';
 import { Paymentilter } from './PaymentFilter';
-import { exporter } from './PaymentExporter';
-import { Typography } from '@material-ui/core';
 import { PaymentListActions } from './PaymentListAction';
+import PaymentLListDesktop from './PaymentListDesktop';
 
 const PaymentsBulkActionButtons = (props: BulkActionProps) => (
     <Fragment>
@@ -36,25 +35,6 @@ const useStyles = makeStyles(theme => ({
         width: 600
     },
 }));
-
-const Aside = (data: any) => {
-
-    var sum: number = 0;
-    for (var i in data.data) {
-        console.log(data.data[i].sum)
-        sum += Number.parseFloat(data.data[i].sum);
-    }
-
-    return (
-        <div style={{ width: 200, margin: '1em' }}>
-            <Typography>Post details</Typography>
-            <Typography variant="body1">
-                {sum}
-            </Typography>
-        </div>
-    )
-};
-
 
 export const PaymentList: FC<ListProps> = props => {
     const classes = useStyles();
@@ -85,12 +65,12 @@ export const PaymentList: FC<ListProps> = props => {
                                 className={classnames(classes.list, {
                                     [classes.listWithDrawer]: isMatch,
                                 })}
-                                exporter={exporter}
+                                exporter={PaymentExporter}
                                 bulkActionButtons={<PaymentsBulkActionButtons />}
                                 filters={<Paymentilter />}
                                 sort={{ field: 'name', order: 'DESC' }}
-                                aside={<Aside />}
                                 actions={<PaymentListActions />}
+                                perPage={25}
                             >
                                 {isXSmall ? (
                                     <PaymentLListDesktop />

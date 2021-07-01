@@ -44,13 +44,13 @@ export const CustomersList: FC<ListProps> = props => {
     const history = useHistory();
 
     const handleClose = useCallback(() => {
-        history.push('/Customers');
+        history.push('/customers');
     }, [history]);
 
 
     return (
         <div className={classes.root}>
-            <Route path="/Customers/:id">
+            <Route path="/customers/:id">
                 {({ match }: RouteChildrenProps<{ id: string }>) => {
                     const isMatch = !!(
                         match &&
@@ -68,7 +68,6 @@ export const CustomersList: FC<ListProps> = props => {
                                 exporter={CustomerExporter}
                                 bulkActionButtons={<CustomersBulkActionButtons />}
                                 filters={<CustomerFilter />}
-                                perPage={5}
                                 sort={{ field: 'name', order: 'DESC' }}
                             >
                                 {isXSmall ? (

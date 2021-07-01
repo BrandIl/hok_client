@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    Datagrid, DatagridProps, FunctionField, Identifier, NumberField, ReferenceField, TextField
+    Datagrid, DatagridProps, FunctionField, Identifier, NumberField, ReferenceField, TextField, translate
 } from 'react-admin';
 import CustomerReferenceField from '../customers/CustomerReferenceField';
 import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
@@ -30,21 +30,21 @@ const useListStyles = makeStyles({
     },
 });
 const Aside = (data: any) => {
-
-    console.log(data);
     var sum: number = 0;
-    // for (var i in data.data) {
-    //     console.log(data.data[i].sum)
-    //     sum += Number.parseFloat(data.data[i].sum);
-    // }
+    for (var i in data.data.data) {
+        sum += Number.parseFloat(data.data.data[i]?.sum);
+    }
 
     return (
-        <div style={{ width: 200, margin: '1em' }}>
-            <Typography>Post details</Typography>
-            <Typography variant="body1">
-                {sum}
-            </Typography>
-        </div>
+        <div>
+
+            <Typography style={{
+                direction: 'ltr',
+                marginLeft: 50,
+                marginTop: 20,
+                marginBottom: 20
+            }} >סה"כ לגביה: {sum}</Typography>
+        </div >
     )
 };
 
@@ -61,7 +61,7 @@ const PaymentLListDesktop: FC<PaymentListDesktopProps> = ({
 }) => {
     const classes = useListStyles();
     return (
-        <>
+        <div>
             <Datagrid
                 // @ts-ignore
                 rowStyle={rowStyle(selectedRow)}
@@ -70,10 +70,17 @@ const PaymentLListDesktop: FC<PaymentListDesktopProps> = ({
                     headerCell: classes.headerCell,
                     rowCell: classes.rowCell,
                 }}
-                asdie={Aside}
                 optimized
                 {...props}
             >
+                <ReferenceField
+                    source="programId"
+                    reference="programs"
+
+                >
+                    <TextField source="ordinalNumber" />
+                </ReferenceField>
+
                 <OrganizationReferenceField />
                 <ProjectReferenceField />
                 <CustomerReferenceField />
@@ -151,7 +158,7 @@ const PaymentLListDesktop: FC<PaymentListDesktopProps> = ({
                 </ReferenceField>
             </Datagrid>
             <Aside data={props} />
-        </>
+        </div>
     );
 };
 

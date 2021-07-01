@@ -8,6 +8,7 @@ import { ProjectEdit } from './ProjectEdit';
 import ProjectListDesktop from './ProjectListDesktpo'
 import ProjectFilter from './ProjectFilter';
 import { ProjectExporter } from './ProjectExporter';
+import ProgramFilter from '../programs/ProgramFilter';
 
 const ProjectsBulkActionButtons = (props: BulkActionProps) => (
     <Fragment>
@@ -68,7 +69,6 @@ export const ProjectList: FC<ListProps> = props => {
                                 exporter={ProjectExporter}
                                 bulkActionButtons={<ProjectsBulkActionButtons />}
                                 filters={<ProjectFilter />}
-                                perPage={5}
                                 sort={{ field: 'name', order: 'DESC' }}
                                 filter={localStorage.permissions === 'admin' ? {} : { organizationId: { $in: JSON.parse(localStorage.organizations) } }}
 

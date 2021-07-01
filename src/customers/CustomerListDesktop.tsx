@@ -1,16 +1,11 @@
+import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    Identifier,
-    Datagrid,
-    TextField,
-    DatagridProps,
-    ReferenceField,
+    Datagrid, DatagridProps, useTranslate, FunctionField, Identifier, ReferenceField, TextField
 } from 'react-admin';
-import { makeStyles } from '@material-ui/core/styles';
-
 import rowStyle from './rowStyle';
-import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
+
 
 const useListStyles = makeStyles({
     headerRow: {
@@ -41,6 +36,7 @@ const OrganizationListDesktop: FC<OrganizationListDesktopProps> = ({
     ...props
 }) => {
     const classes = useListStyles();
+    const translate = useTranslate();
     return (
         <Datagrid
             rowClick="edit"
@@ -54,6 +50,8 @@ const OrganizationListDesktop: FC<OrganizationListDesktopProps> = ({
             optimized
             {...props}>
             {/* <OrganizationReferenceField /> */}
+            <TextField source="ordinalNumber" />
+
             <ReferenceField
                 source="organizationId"
                 reference="organizations"
@@ -63,6 +61,17 @@ const OrganizationListDesktop: FC<OrganizationListDesktopProps> = ({
             <TextField source="firstName" />
             <TextField source="lastName" />
             <TextField source="identity" />
+            <TextField source="communication.address.city.name" />
+            <TextField source="communication.address.city.name" />
+            <FunctionField
+                label={translate("resources.customers.fields.communication.address.street.name")}
+                render={(record: any) => {
+                    return `${record.communication.address.street.name}   `
+                        + `    ${record.communication.address.street.number}`
+                }}
+            />
+            <TextField source="communication.email" />
+            <TextField source="communication.celular" />
         </Datagrid>
     );
 };

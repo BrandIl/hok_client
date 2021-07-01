@@ -30,7 +30,7 @@ const fetchJson = (url: URL, options: any = {}) => {
   //options.headers.set("Authorization", `${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = simpleRestProvider("http://localhost:4000/api", fetchJson);
+export const dataProvider = simpleRestProvider("http://localhost:4000/api", fetchJson);
 const i18nProvider = polyglotI18nProvider(locale => {
   if (locale === 'en') {
     return import('./i18n/en').then(messages => messages.default);

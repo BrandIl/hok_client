@@ -9,11 +9,9 @@ import {
     SimpleForm, TextInput,
     useEditController, useTranslate
 } from 'react-admin';
-import { OrganizationInput } from '../organizations/OrganizationInput';
-import OrganizationReferenceFiled from '../organizations/OrganizationReferenceField';
 import SectionTitle from '../utils/SectionTitle';
 import { Customer } from '../utils/types';
-import { validateNames, validateDigits, validateEmail } from '../utils/validations';
+import { validateDigits, validateEmail, validateNames } from '../utils/validations';
 
 
 const useStyles = makeStyles(theme => ({
@@ -66,18 +64,28 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                 </IconButton>
             </div>
             <EditContextProvider value={controllerProps}>
-                <SimpleForm>
+                <SimpleForm
+                    className={classes.form}
+                    basePath={controllerProps.basePath}
+                    record={controllerProps.record}
+                    save={controllerProps.save}
+                    version={controllerProps.version}
+                    redirect="list"
+                    resource="customers"
+                >
                     <SectionTitle
                         label={translate("resources.customers.fieldGroups.personal_details")}
                     />
                     <TextInput
                         source="firstName"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateNames(2, 10)}
                     />
                     <TextInput
                         source="lastName"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateNames(2, 10)}
                     />
                     <SectionTitle
@@ -86,6 +94,7 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                     <TextInput
                         source="identity"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateDigits(9, 9)}
 
                     />
@@ -95,11 +104,13 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                     <TextInput
                         source="communication.address.city.name"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateNames(2, 20)}
                     />
                     <TextInput
                         source="communication.address.city.zip"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateDigits(5, 8)}
                     />
                     <SectionTitle
@@ -108,11 +119,13 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                     <TextInput
                         source="communication.address.street.name"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateNames(2, 20)}
                     />
                     <TextInput
                         source="communication.address.street.number"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateNames(1, 20)}
 
                     />
@@ -124,20 +137,21 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                         type="email"
                         source="communication.email"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateEmail}
                     />
 
                     <TextInput
                         source="communication.celular"
                         formClassName={classes.formInput}
+                        variant="standard"
                         validate={validateDigits(9, 10)}
                     />
                     <TextInput
                         source="communication.remarks"
                         formClassName={classes.formInput}
+                        variant="standard"
                     />
-
-
                     <SectionTitle
                         label={translate("resources.organizations.name", { smart_count: 1 })}
                     />
@@ -145,6 +159,8 @@ export const CustomerEdit: FC<Props> = ({ onCancel, ...props }) => {
                     <ReferenceInput
                         source="organizationId"
                         reference="organizations"
+                        variant="standard"
+
                     >
                         <AutocompleteInput
                             optionText="name"

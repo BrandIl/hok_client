@@ -3,17 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
-    EditContextProvider, EditProps,
-    FormTab, required, SimpleForm, TabbedForm, TextInput,
+    BooleanInput,
+    EditContextProvider, EditProps, SimpleForm, TextInput,
     useEditController, useTranslate
 } from 'react-admin';
 import { CustomerInput } from '../customers/CustomerInput';
 import { OrganizationInput } from '../organizations/OrganizationInput';
 import { ProjectInput } from '../projects/ProjectInput';
-import ProjectReferenceField from '../projects/ProjectReferenceField';
 import SectionTitle from '../utils/SectionTitle';
 import { Organization } from '../utils/types';
-import { expiringDate, validateDigits, validateEmail, validateNames, validatePrice } from '../utils/validations';
+import { validateDigits, validatePrice } from '../utils/validations';
 
 
 const useStyles = makeStyles(theme => ({
@@ -58,7 +57,7 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
         <div className={classes.root}>
             <div className={classes.title}>
                 <Typography variant="h6">
-                    {translate('resources.organizations.details')}
+                    {translate('resources.programs.fieldGroups.customer_details')}
                 </Typography>
                 <IconButton onClick={onCancel}>
                     <CloseIcon />
@@ -74,10 +73,7 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     redirect="list"
                     resource="programs"
                 >
-                    <ProjectReferenceField />
-                    <SectionTitle
-                        label={translate("resources.programs.fieldGroups.customer_details")}
-                    />
+
                     <>
                         <OrganizationInput />
                         <ProjectInput />
@@ -89,18 +85,26 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     />
                     <TextInput
                         source="sum"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         validate={validatePrice}
                     />
                     <TextInput
                         source="startDate"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         type="month"
                         defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
                     />
                     <TextInput
                         source="endDate"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
                         type="month"
                         defaultValue={`${new Date().getFullYear() + 1}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
                     />
@@ -109,13 +113,19 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
                     />
                     <TextInput
                         source="numOfPayments"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         validate={validateDigits(1, 3)}
                     />
 
                     <TextInput
                         source="launchDay"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         type="year"
                         validate={validateDigits(1, 2)}
                     />
@@ -127,41 +137,33 @@ export const ProgramEdit: FC<Props> = ({ onCancel, ...props }) => {
 
                     <TextInput
                         source="paymentMethod.bankAccount.bankId"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         validate={validateDigits(2, 2)}
                     />
                     <TextInput
                         source="paymentMethod.bankAccount.branchId"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         validate={validateDigits(3, 3)}
                     />
                     <TextInput
                         source="paymentMethod.bankAccount.accountNumber"
-                        formClassName={classes.inlineField}
+                        formClassName={classes.inlineField
+                        }
+                        variant="standard"
+
                         validate={validateDigits(6, 6)}
                     />
 
-                    {/* <SectionTitle
-                        label={translate("resources.programs.fieldGroups.credit_card")}
-                    />
-                    <TextInput
-                        source="paymentMethod.creditCard.creditNumber"
+                    <BooleanInput
+                        source="isActive"
                         formClassName={classes.inlineField}
-                        validate={validateDigits(8, 16)}
                     />
-                    <TextInput
-                        source="paymentMethod.creditCard.expiringDate"
-                        formClassName={classes.inlineField}
-                        type="month"
-                        defaultValue={`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}`}
-                        validate={expiringDate}
-                    />
-                    <TextInput
-                        source="paymentMethod.creditCard.cvv2"
-                        formClassName={classes.inlineField}
-                        validate={validateDigits(3, 3)}
-                    /> */}
-
                 </SimpleForm>
             </EditContextProvider>
         </div >

@@ -53,13 +53,14 @@ export interface Organization extends Record {
 
 
 export interface Project extends Record {
+    organizationId: Identifier,
     name: string;
 }
 
 export interface Program extends Record {
     sum: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     numOfPayments: number;
     launchDay: number,
     paymentMethod: {
@@ -71,7 +72,8 @@ export interface Program extends Record {
     },
     organizationId: Identifier,
     projectId: Identifier,
-    customerId: Identifier
+    customerId: Identifier,
+    isActive: boolean
 }
 
 export interface Payment extends Record {
@@ -91,6 +93,7 @@ export interface Payment extends Record {
     projectId: Identifier,
     customerId: Identifier,
     programId: Identifier,
+    status: boolean
 }
 
 
@@ -116,4 +119,11 @@ export interface Customer extends Record {
     organizationId: Identifier;
 }
 
+
+export interface User extends Record {
+    isAdmin: boolean,
+    organizations: [string],
+    name: string,
+    email: string
+}
 

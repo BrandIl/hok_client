@@ -73,15 +73,14 @@ export const ProjectEdit: FC<Props> = ({ onCancel, ...props }) => {
                     resource="projects"
                 >
 
-                    <>
-                        <OrganizationReferenceField />
-                        <OrganizationInput />
-                    </>
+
+                    <OrganizationInput />
 
                     <TextInput
                         source="name"
                         formClassName={classes.inlineField}
                         validate={validateNames(2, 10)}
+                        variant="standard"
                     />
                 </SimpleForm>
             </EditContextProvider>
