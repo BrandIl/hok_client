@@ -44,7 +44,8 @@ const customFrenchMessages: TranslationMessages = {
             payments: 'תשלומים',
             dashboard: 'תפריט ראשי',
             reports: 'דוחות',
-            configurations: 'הגדרות'
+            configurations: 'הגדרות',
+            collection: 'גביה'
         },
         validations: {
             digits: 'יכול להכיל רק ספרות'
@@ -159,6 +160,7 @@ const customFrenchMessages: TranslationMessages = {
                 projectId: 'פרויקט',
                 customerId: 'שם לקוח',
                 programId: 'מספר תוכנית',
+                collectionDate: 'תאריך גביה'
 
             },
             filter: {
@@ -297,6 +299,13 @@ const customFrenchMessages: TranslationMessages = {
                 save_error: '!שגיאה',
             },
         },
+        agreement: {
+            launchCollection: 'בצע גביה עבור תאריך:',
+            notifications: {
+                collect_success: 'הגביה בוצעה בהצלחה!',
+                collect_error: '!שגיאה',
+            },
+        }
     }
 };
 

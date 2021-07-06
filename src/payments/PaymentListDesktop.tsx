@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    Datagrid, DatagridProps, FunctionField, Identifier, NumberField, ReferenceField, TextField, translate
+    Datagrid, DatagridProps, FunctionField, Identifier, NumberField, ReferenceField, TextField
 } from 'react-admin';
 import CustomerReferenceField from '../customers/CustomerReferenceField';
 import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
@@ -157,7 +157,7 @@ const PaymentLListDesktop: FC<PaymentListDesktopProps> = ({
 
                 </ReferenceField>
             </Datagrid>
-            <Aside data={props} />
+            {/* <Aside data={props} /> */}
         </div>
     );
 };

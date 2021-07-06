@@ -1,15 +1,15 @@
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
     BooleanField,
-    Datagrid, DatagridProps, DateField, FunctionField, Identifier, ReferenceField, TextField
+    Datagrid, DatagridProps, FunctionField, Identifier, TextField
 } from 'react-admin';
 import CustomerReferenceField from '../customers/CustomerReferenceField';
 import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
 import ProjectReferenceField from '../projects/ProjectReferenceField';
 import rowStyle from './rowStyle';
-import { Typography } from '@material-ui/core';
 
 
 

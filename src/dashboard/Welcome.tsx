@@ -1,9 +1,12 @@
-import { Box, Card, Typography } from '@material-ui/core';
+import { Box, Card, CardMedia, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
-import { useTranslate } from 'react-admin';
-import publishArticleImage from './welcome_illustration.svg';
+import { Button, useTranslate } from 'react-admin';
+import payment from './payment.svg';
+
+
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -19,8 +22,8 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '1em',
     },
     media: {
-        background: `url(${publishArticleImage}) top right / cover`,
-        marginLeft: 'auto',
+        background: `url(${payment}) top right / cover`,
+        // marginLeft: 'auto',
     },
     actions: {
         [theme.breakpoints.down('md')]: {
@@ -39,28 +42,44 @@ const Welcome: FC = () => {
     const translate = useTranslate();
     const classes = useStyles();
     return (
-        <Card className={classes.root}>
-            <Box display="flex">
-                <Box flex="1">
-                    <Typography align="center" variant="h1" component="h2" gutterBottom >
-                        {translate('Welcome')}
-                    </Typography>
-                    <Box maxWidth="40em">
-                        <Typography variant="body1" component="p" gutterBottom>
-
+        <>
+            <Card className={classes.root}>
+                <Box display="flex">
+                    <Box flex="1">
+                        <Typography align="center" variant="h1" component="h2" gutterBottom >
+                            {/* {translate('Welcome')} */}
                         </Typography>
+                        <Box maxWidth="40em">
+                            <Typography variant="body1" component="p" gutterBottom>
+
+                            </Typography>
+                        </Box>
                     </Box>
                 </Box>
 
-                <Box
-                    display={{ xs: 'none', sm: 'none', md: 'block' }}
-                    className={classes.media}
-                    width="16em"
-                    height="9em"
-                    overflow="hidden"
-                />
+            </Card>
+            <Box component="span" m={1}>
+                <Button />
             </Box>
-        </Card>
+            <CardMedia
+                component="img"
+                alt="Contemplative Reptile"
+                height="140"
+                image="./welcome_illustration.svg"
+                title="Contemplative Reptile"
+            />
+            <Box
+                component="span" m={1}
+                display={{ xs: 'none', sm: 'none', md: 'block' }}
+                className={classes.media}
+                width="16em"
+                height="49em"
+                overflow="hidden"
+            />
+            <Typography className={classes.media} variant="h1" component="h2">
+                h1. Heading
+            </Typography>
+        </>
     );
 };
 

@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import SettingsIcon from '@material-ui/icons/Settings';
 import * as React from 'react';
 import { forwardRef } from 'react';
-import { AppBar, Link, MenuItemLink, UserMenu, useTranslate } from 'react-admin';
+import { AppBar, MenuItemLink, UserMenu, useTranslate } from 'react-admin';
 
 
 const useStyles = makeStyles({

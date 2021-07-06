@@ -62,6 +62,7 @@ const CardWithIcon: FC<Props> = props => {
                     <Box width="3em" className="icon">
                         {createElement(icon, { fontSize: 'large' })}
                     </Box>
+
                 </div>
             </Link>
             {children && <Divider />}

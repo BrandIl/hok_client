@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
-    EditContextProvider, EditProps,
-    FormTab, required, SimpleForm, TabbedForm, TextInput,
+    EditContextProvider, EditProps, SimpleForm, TextInput,
     useEditController, useTranslate
 } from 'react-admin';
 import { CustomerInput } from '../customers/CustomerInput';
@@ -13,7 +12,7 @@ import { ProjectInput } from '../projects/ProjectInput';
 import ProjectReferenceField from '../projects/ProjectReferenceField';
 import SectionTitle from '../utils/SectionTitle';
 import { Organization } from '../utils/types';
-import { expiringDate, validateDigits, validateEmail, validateNames, validatePrice } from '../utils/validations';
+import { validateDigits, validatePrice } from '../utils/validations';
 
 
 const useStyles = makeStyles(theme => ({

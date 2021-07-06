@@ -2,12 +2,15 @@ import { makeStyles } from '@material-ui/core';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    AutocompleteInput, Filter, FilterProps, FormDataConsumer, ReferenceInput, SearchInput, SelectInput
+    AutocompleteInput, DateInput, DateTimeInput, Filter, FilterProps, FormDataConsumer, ReferenceInput, SelectInput
 } from 'react-admin';
+import { TextField, Typography } from '@material-ui/core';
+
 import { CustomerFiltertInput } from '../customers/CustomerFilterInput';
 import { ProgramFiltertInput } from '../programs/ProgramFiltertInput';
 import { ProjectFiltertInput } from '../projects/ProjectFilterInput';
 import { Organization } from '../utils/types';
+import { useState } from 'react';
 
 
 
@@ -19,7 +22,8 @@ const useFilterStyles = makeStyles({
 
 export const Paymentilter: FC<Omit<FilterProps, 'children'>> = props => {
     const classes = useFilterStyles();
-    // debugger;
+    const [agreementDate, setAgreementDate] = useState("");
+
     return (
         <Filter {...props}
         // key={props['currentFilter']['field']}
@@ -40,21 +44,26 @@ export const Paymentilter: FC<Omit<FilterProps, 'children'>> = props => {
 
                 />
             </ReferenceInput >
-            <CustomerFiltertInput />
-            {/* <FormDataConsumer key="uniqueId1" >
+            <DateInput
+                source="collectionDate"
+                variant="standard"
+
+            />
+
+
+            <FormDataConsumer alwaysOn >
                 {
                     ({ formData, ...restOfTheProps }) => formData.organizationId &&
-                        <CustomerFiltertInput /> && <ProjectFiltertInput /> && <ProgramFiltertInput />
+                        <>
+                            <ProjectFiltertInput />
+                            <CustomerFiltertInput />
+                            <ProgramFiltertInput />
+
+                        </>
+
+
                 }
             </FormDataConsumer>
-
-            <FormDataConsumer key="uniqu1">
-                {
-                    ({ formData, ...restOfTheProps }) => formData.organizationId &&
-                        <CustomerFiltertInput /> && <ProjectFiltertInput /> && <ProgramFiltertInput />
-                }
-            </FormDataConsumer> */}
-
 
             <SelectInput
                 source="status"

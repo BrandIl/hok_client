@@ -1,8 +1,7 @@
 import React from 'react';
-import { ReferenceInput, SelectInput, useTranslate } from 'react-admin';
+import { AutocompleteInput, ReferenceInput, SelectInput, useTranslate } from 'react-admin';
 import { useFormState } from 'react-final-form';
 import { useStyles } from '../utils/styles';
-import { Customer, Program } from '../utils/types';
 
 export const ProgramFiltertInput = () => {
     const { values } = useFormState();
@@ -21,11 +20,7 @@ export const ProgramFiltertInput = () => {
             variant="standard"
         >
             <SelectInput
-                optionText={(choice?: Program) =>
-                    choice?.id // the empty choice is { id: '' }
-                        ? `${choice.ordinalNumber} `
-                        : ''
-                }
+                optionText="ordinalNumber"
                 resettable
             />
         </ReferenceInput>

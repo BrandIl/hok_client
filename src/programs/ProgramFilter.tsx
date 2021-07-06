@@ -2,13 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
 import {
-    AutocompleteInput, BooleanInput, Filter, FilterProps,
-    FormDataConsumer,
-    ReferenceInput, SearchInput, SelectInput
+    AutocompleteInput, Filter, FilterProps, ReferenceInput, SelectInput
 } from 'react-admin';
-import { CustomerFiltertInput } from '../customers/CustomerFilterInput';
-import { ProjectFiltertInput } from '../projects/ProjectFilterInput';
-import { Organization } from '../utils/types';
 
 
 const useFilterStyles = makeStyles({

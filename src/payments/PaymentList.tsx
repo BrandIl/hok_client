@@ -60,6 +60,8 @@ export const PaymentList: FC<ListProps> = props => {
 
                     return (
                         <Fragment>
+
+
                             <List
                                 {...props}
                                 className={classnames(classes.list, {
@@ -71,6 +73,7 @@ export const PaymentList: FC<ListProps> = props => {
                                 sort={{ field: 'name', order: 'DESC' }}
                                 actions={<PaymentListActions />}
                                 perPage={25}
+                                filterDefaultValues={{ organizationId: "" }}
                             >
                                 {isXSmall ? (
                                     <PaymentLListDesktop />
@@ -85,8 +88,10 @@ export const PaymentList: FC<ListProps> = props => {
                                                 ) : undefined
                                         }
                                     />
+
                                 )}
                             </List>
+
                             <Drawer
                                 variant="persistent"
                                 open={isMatch}

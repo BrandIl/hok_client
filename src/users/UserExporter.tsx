@@ -1,6 +1,6 @@
 import jsonExport from 'jsonexport/dist';
 import { downloadCSV } from 'react-admin';
-import { Project, User } from '../utils/types';
+import { User } from '../utils/types';
 
 
 export const UserExporter = (records: User[], fetchRelatedRecords: any) => {

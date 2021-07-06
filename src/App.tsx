@@ -11,13 +11,12 @@ import { Dashboard } from "./dashboard";
 import hebrewMessages from './i18n/heb';
 import { Layout, Login } from './layout';
 import organizations from "./organizations";
+import payments from "./payments";
 import programs from "./programs";
 import projects from "./projects";
+import users from "./users";
 import { customRoutes } from "./utils/routes";
 import themeReducer from "./utils/themeReducer";
-import users from "./users";
-import dp from './admin-props/dataProvider'
-import payments from "./payments";
 
 
 const fetchJson = (url: URL, options: any = {}) => {
@@ -47,7 +46,7 @@ const App = () => (
     customReducers={{ theme: themeReducer }}
     customRoutes={customRoutes}
     authProvider={authProvider}
-    dashboard={Dashboard}
+    // dashboard={Dashboard}
     loginPage={Login}
     layout={Layout}
     i18nProvider={i18nProvider}

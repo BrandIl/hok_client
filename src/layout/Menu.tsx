@@ -7,14 +7,13 @@ import {
     MenuProps, useTranslate
 } from 'react-admin';
 import { useSelector } from 'react-redux';
-import programs from '../programs';
-import { AppState } from '../utils/types';
-import users from '../users';
-import organizations from '../organizations';
-import projects from '../projects';
 import customers from '../customers';
+import organizations from '../organizations';
 import payments from '../payments';
-import authProvider from '../admin-props/authProvider';
+import programs from '../programs';
+import projects from '../projects';
+import users from '../users';
+import { AppState } from '../utils/types';
 
 const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
 
@@ -69,15 +68,23 @@ const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
                 sidebarIsOpen={open}
                 dense={dense}
             />
-            {/* <MenuItemLink
+            <MenuItemLink
                 to={`/agreement`}
-                primaryText={translate('pos.menu.reports')}
+                primaryText={translate('pos.menu.collection')}
                 leftIcon={<programs.icon />}
                 onClick={onMenuClick}
                 sidebarIsOpen={open}
                 dense={dense}
-            /> */}
+            />
             {localStorage.getItem("permissions") === 'admin' &&
+                <MenuItemLink
+                    to={`/agreement`}
+                    primaryText={translate('pos.menu.collection')}
+                    leftIcon={<programs.icon />}
+                    onClick={onMenuClick}
+                    sidebarIsOpen={open}
+                    dense={dense}
+                /> &&
                 <MenuItemLink
                     to={`/users`}
                     primaryText={translate('pos.menu.users')}

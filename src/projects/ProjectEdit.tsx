@@ -8,8 +8,6 @@ import {
     useEditController, useTranslate
 } from 'react-admin';
 import { OrganizationInput } from '../organizations/OrganizationInput';
-import OrganizationReferenceField from '../organizations/OrganizationReferenceField';
-import SectionTitle from '../utils/SectionTitle';
 import { Organization } from '../utils/types';
 import { validateNames } from '../utils/validations';
 

@@ -1,7 +1,7 @@
 import { Theme, useMediaQuery } from '@material-ui/core';
 import { FC } from "react";
 import { ResourceComponentProps } from "react-admin";
-import { TryEmail } from '../utils/TryEmail';
+import { DispathCollection } from '../reports/genarateMasavFile';
 import GenerateCharges from "./GenerateCharges";
 import OrganizationsListDashboard from "./OrganizationsListDashboard";
 import Welcome from "./Welcome";
@@ -14,9 +14,6 @@ const styles = {
     rightCol: { flex: 1, marginLeft: '0.5em' },
     singleCol: { marginTop: '1em', marginBottom: '1em' },
 };
-
-const Spacer = () => <span style={{ width: '1em' }} />;
-const VerticalSpacer = () => <span style={{ height: '1em' }} />;
 
 export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
     const isXSmall = useMediaQuery((theme: Theme) =>
@@ -55,19 +52,12 @@ export const Dashboard: FC<ResourceComponentProps> = ({ permissions }) => {
         <>
             <Welcome />
 
-            <TryEmail />
-            <div style={styles.flex}>
+            <div >
                 <div style={styles.leftCol}>
                     {
                         permissions === 'admin' &&
-                        <div style={styles.flex}>
-                            <GenerateCharges />
-                        </div>
+                        <DispathCollection />
                     }
-                    <div style={styles.singleCol}>
-                        <OrganizationsListDashboard />
-                    </div>
-
                 </div>
             </div>
         </>

@@ -4,7 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React, { FC } from 'react';
 import {
     EditContextProvider, EditProps,
-    FormTab, required, TabbedForm, TextInput,
+    FormTab, TabbedForm, TextInput,
     useEditController, useTranslate
 } from 'react-admin';
 import SectionTitle from '../utils/SectionTitle';

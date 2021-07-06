@@ -1,17 +1,13 @@
-import * as React from 'react';
-import { cloneElement, useMemo } from 'react';
-import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
-import {
-    useListContext,
-    TopToolbar,
-    CreateButton,
-    ExportButton,
-    Button,
-    sanitizeListRestProps,
-} from 'react-admin';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import { genarte } from './SendByMailPayments';
+import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import { stringify } from 'query-string';
+import * as React from 'react';
+import { cloneElement } from 'react';
+import {
+    Button, CreateButton,
+    ExportButton, sanitizeListRestProps, TopToolbar, useListContext
+} from 'react-admin';
+import { genarte } from './SendByMailPayments';
 
 export const PaymentListActions = (props: any) => {
     const {
@@ -26,9 +22,7 @@ export const PaymentListActions = (props: any) => {
         resource,
         displayedFilters,
         filterValues,
-        hasCreate,
         basePath,
-        selectedIds,
         showFilter,
         total,
     } = useListContext();

@@ -3,9 +3,8 @@ import * as React from 'react';
 import { FC } from 'react';
 import {
     AutocompleteInput, Filter, FilterProps,
-    ReferenceInput, SearchInput, SelectInput
+    ReferenceInput, SearchInput
 } from 'react-admin';
-import { Organization } from '../utils/types';
 
 
 const useFilterStyles = makeStyles({

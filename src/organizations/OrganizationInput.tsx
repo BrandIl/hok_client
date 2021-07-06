@@ -1,6 +1,5 @@
 import React from 'react';
-import { useTranslate, required, ReferenceInput, SelectInput, AutocompleteInput } from 'react-admin';
-import { useFormState } from 'react-final-form';
+import { AutocompleteInput, ReferenceInput, required, useTranslate } from 'react-admin';
 import { useStyles } from '../utils/styles';
 
 export const OrganizationInput = () => {

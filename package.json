@@ -24,6 +24,7 @@
     "ra-language-hebrew-il": "^3.9.6",
     "react": "^17.0.1",
     "react-admin": "^3.12.0",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
@@ -55,13 +56,15 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:4000",
+  "proxy": "https://hoks.herokuapp.com",
   "devDependencies": {
     "@types/classnames": "^2.3.1",
     "@types/dateformat": "^3.0.1",
     "@types/html-pdf": "^2.2.0",
     "@types/jsonexport": "^3.0.1",
     "@types/mustache": "^4.1.1",
+    "@types/react-datepicker": "^4.1.1",
+    "@types/react-dom": "^17.0.8",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7"
   }

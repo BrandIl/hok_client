@@ -1,6 +1,4 @@
 import green from '@material-ui/core/colors/green';
-import orange from '@material-ui/core/colors/orange';
-import red from '@material-ui/core/colors/red';
 import { useTheme } from '@material-ui/core/styles';
 import { Identifier } from 'react-admin';
 import { Program } from '../utils/types';

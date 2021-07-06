@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { FC } from 'react';
-import { BooleanField, ChipField, Datagrid, DatagridProps, EmailField, Identifier, ReferenceArrayField, SingleFieldList, TextField, useTranslate } from 'react-admin';
+import { BooleanField, ChipField, Datagrid, DatagridProps, EmailField, Identifier, ReferenceArrayField, SingleFieldList, TextField } from 'react-admin';
 import rowStyle from './rowStyle';
 
 
@@ -48,12 +48,13 @@ const UserListDesktop: FC<UserListDesktopProps> = ({
             {...props}>
             <TextField label="שם משתמש" source="name" />
             <EmailField label="כתובת מייל" source="email" />
-            <BooleanField label="מנהל?" source="isAdmin" />
             <ReferenceArrayField label="ארגונים" reference="organizations" source="organizations">
                 <SingleFieldList>
                     <ChipField source="name" />
                 </SingleFieldList>
             </ReferenceArrayField>
+            <BooleanField label="מנהל?" source="isAdmin" />
+
         </Datagrid>
     );
 };
