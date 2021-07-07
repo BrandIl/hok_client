@@ -1,38 +1,27 @@
-import englishMessages from 'ra-language-english';
+import EnglishMessages from 'ra-language-english';
 import { TranslationMessages } from 'react-admin';
 
 const customEnglishMessages: TranslationMessages = {
-    ...englishMessages,
-
+    ...EnglishMessages,
+    ra: {
+        ...EnglishMessages.ra,
+        navigation: {
+            ...EnglishMessages.ra.navigation,
+            skip_nav: 'skip'
+        }
+    },
     pos: {
-        search: 'Search',
-        configuration: 'Configuration',
-        language: 'Language',
+        save: 'save',
+        search: 'serch',
+        configuration: 'configuration',
+        language: 'language',
         theme: {
-            name: 'Theme',
-            light: 'Light',
-            dark: 'Dark',
+            name: 'theme',
+            light: 'light',
+            dark: 'dark',
         },
         dashboard: {
-            monthly_revenue: 'Monthly Revenue',
-            month_history: '30 Day Revenue History',
-            new_orders: 'New Orders',
-            pending_reviews: 'Pending Reviews',
-            all_reviews: 'See all reviews',
-            new_customers: 'New Customers',
-            all_customers: 'See all customers',
-            pending_orders: 'Pending Orders',
-            order: {
-                items:
-                    'by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items',
-            },
-            welcome: {
-                title: 'Welcome to the react-admin e-commerce demo',
-                subtitle:
-                    "This is the admin of an imaginary poster shop. Feel free to explore and modify the data - it's local to your computer, and will reset each time you reload.",
-                ra_button: 'react-admin site',
-                demo_button: 'Source for this demo',
-            },
+
         },
         menu: {
             users: 'users',
@@ -40,190 +29,268 @@ const customEnglishMessages: TranslationMessages = {
             customers: 'customers',
             programs: 'programs',
             projects: 'projects',
+            payments: 'payments',
             dashboard: 'dashboard',
             reports: 'reports',
-            payments: 'payments',
-            configurations: 'configurations'
+            configurations: 'configurations',
+            collection: 'collection'
+        },
+        validations: {
+            digits: 'may contains only digits'
         },
     },
     resources: {
-        customers: {
-            name: 'Customer |||| Customers',
+        organizations: {
+            name: ' organization |||| organizations',
             fields: {
-                commands: 'Orders',
-                first_seen: 'First seen',
-                groups: 'Segments',
-                last_seen: 'Last seen',
-                last_seen_gte: 'Visited Since',
-                name: 'Name',
-                total_spent: 'Total spent',
-                password: 'Password',
-                confirm_password: 'Confirm password',
-                stateAbbr: 'State',
+                name: 'organization name',
+                communication: {
+                    address: {
+                        city: {
+                            zip: 'zip',
+                            name: 'city'
+                        },
+                        street: {
+                            name: 'street',
+                            number: 'number'
+                        }
+                    },
+                    concats: {
+                        name: 'concat',
+                        celular: 'celular',
+                        email: 'email',
+                        remarks: 'remarks',
+                    },
+                },
+                masavData: {
+                    credit: {
+                        codeNosse: 'codeNosse',
+                        senderCode: 'senderCode',
+                    },
+                    charge: {
+                        codeNosse: 'codeNosse',
+                        senderCode: 'senderCode',
+                    }
+                },
+
+                paymentAgreement: {
+                    minPrice: 'minPrice',
+                    feePerUnit: 'feePerUnit',
+                    paymentMethod: {
+                        bankAccount: {
+                            bankId: 'bankId',
+                            branchId: 'branchId',
+                            accountNumber: 'accountNumber',
+                        }
+                    }
+                }
+            },
+            titles: {
+                create: 'Create new organization',
+                edit: 'Edit an organization',
+                show: '*****',
+                address: 'Address',
+                details: 'Communication',
+                organization_name: 'Crganization name',
+                organization_details: 'Crganization details',
+                masav_details: 'Masav details',
+                payment_method: 'Payment method',
+                credits: 'Credits',
+                charges: 'Charges',
+                bank_account: 'Bank account ',
+                cerdit_card: 'Cerdit card',
+                payment: 'Payment',
+            },
+            notifications: {
+                create_success: 'New organization have been created succsefuly! ',
+                edit_success: 'The organization have been changed succsefuly!',
+                save_error: 'Error',
+            },
+            details: 'organizatin etails'
+        },
+        projects: {
+            name: 'project |||| projects',
+            fields: {
+                ordinalNumber: 'Project num',
+                organizationId: 'organization',
+                name: 'Project name',
+            },
+            titles: {
+                create: 'Add new Project',
+                edit: 'Edit a project',
+                show: '*****',
+            },
+            notifications: {
+                create_success: 'The project have been created succsefully!',
+                edit_success: 'The project have been changed succsefully!',
+                save_error: 'Error!',
+            },
+            details: 'Project details'
+        },
+        payments: {
+            name: 'payment |||| payments',
+            fields: {
+                organizationId: 'organization',
+                sum: 'sum',
+                startDate: 'Open date',
+                endDate: 'Close Date',
+                numOfPayments: 'Num of payments',
+                launchDay: 'Launch Day',
+                paymentMethod: {
+                    bankAccount: {
+                        bankId: 'Bank Id',
+                        branchId: 'Branch Id',
+                        accountNumber: 'Account Number',
+                    }
+                },
+                status: 'Status',
+                projectId: 'Project',
+                customerId: 'Customer Name',
+                programId: 'Program Num',
+                collectionDate: 'Collection date'
+
+            },
+            filter: {
+
+            }
+        },
+        customers: {
+            name: 'customer |||| customers',
+            fields: {
+                ordinalNumber: 'Customer num ',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                identity: 'Identity',
+
+                communication: {
+                    address: {
+                        city: {
+                            name: 'city',
+                            zip: 'zip',
+                        },
+                        street: {
+                            name: 'street',
+                            number: 'number',
+                        }
+                    },
+                    email: 'email',
+                    celular: 'celular',
+                    remarks: 'remarks'
+
+                },
+                organizationId: 'organization',
             },
             filters: {
-                last_visited: 'Last visited',
-                today: 'Today',
-                this_week: 'This week',
-                last_week: 'Last week',
-                this_month: 'This month',
-                last_month: 'Last month',
-                earlier: 'Earlier',
-                has_ordered: 'Has ordered',
-                has_newsletter: 'Has newsletter',
-                group: 'Segment',
+                projectId: "project"
             },
+            details: 'customer details',
             fieldGroups: {
-                identity: 'Identity',
-                address: 'Address',
-                stats: 'Stats',
-                history: 'History',
-                password: 'Password',
-                change_password: 'Change Password',
+                personal_details: 'Personal details',
+                address: 'address',
+                communication: 'communication',
             },
             page: {
-                delete: 'Delete Customer',
+                delete: 'delete ',
             },
             errors: {
                 password_mismatch:
-                    'The password confirmation is not the same as the password.',
-            },
-        },
-        commands: {
-            name: 'Order |||| Orders',
-            amount: '1 order |||| %{smart_count} orders',
-            title: 'Order %{reference}',
-            fields: {
-                basket: {
-                    delivery: 'Delivery',
-                    reference: 'Reference',
-                    quantity: 'Quantity',
-                    sum: 'Sum',
-                    tax_rate: 'Tax Rate',
-                    taxes: 'Tax',
-                    total: 'Total',
-                    unit_price: 'Unit Price',
-                },
-                address: 'Address',
-                customer_id: 'Customer',
-                date_gte: 'Passed Since',
-                date_lte: 'Passed Before',
-                nb_items: 'Nb Items',
-                total_gte: 'Min amount',
-                status: 'Status',
-                returned: 'Returned',
-            },
-            section: {
-                order: 'Order',
-                customer: 'Customer',
-                shipping_address: 'Shipping Address',
-                items: 'Items',
-                total: 'Totals',
-            },
-        },
-        invoices: {
-            name: 'Invoice |||| Invoices',
-            fields: {
-                date: 'Invoice date',
-                customer_id: 'Customer',
-                command_id: 'Order',
-                date_gte: 'Passed Since',
-                date_lte: 'Passed Before',
-                total_gte: 'Min amount',
-                address: 'Address',
-            },
-        },
-        products: {
-            name: 'Poster |||| Posters',
-            fields: {
-                category_id: 'Category',
-                height_gte: 'Min height',
-                height_lte: 'Max height',
-                height: 'Height',
-                image: 'Image',
-                price: 'Price',
-                reference: 'Reference',
-                sales: 'Sales',
-                stock_lte: 'Low Stock',
-                stock: 'Stock',
-                thumbnail: 'Thumbnail',
-                width_gte: 'Min width',
-                width_lte: 'Max width',
-                width: 'Width',
-            },
-            tabs: {
-                image: 'Image',
-                details: 'Details',
-                description: 'Description',
-                reviews: 'Reviews',
-            },
-            filters: {
-                categories: 'Categories',
-                stock: 'Stock',
-                no_stock: 'Out of stock',
-                low_stock: '1 - 9 items',
-                average_stock: '10 - 49 items',
-                enough_stock: '50 items & more',
-                sales: 'Sales',
-                best_sellers: 'Best sellers',
-                average_sellers: 'Average',
-                low_sellers: 'Low',
-                never_sold: 'Never sold',
-            },
-        },
-        categories: {
-            name: 'Category |||| Categories',
-            fields: {
-                products: 'Products',
-            },
-        },
-        reviews: {
-            name: 'Review |||| Reviews',
-            amount: '1 review |||| %{smart_count} reviews',
-            relative_to_poster: 'Review on poster',
-            detail: 'Review detail',
-            fields: {
-                customer_id: 'Customer',
-                command_id: 'Order',
-                product_id: 'Product',
-                date_gte: 'Posted since',
-                date_lte: 'Posted before',
-                date: 'Date',
-                comment: 'Comment',
-                rating: 'Rating',
-            },
-            action: {
-                accept: 'Accept',
-                reject: 'Reject',
+                    'password mismatch',
             },
             notification: {
-                approved_success: 'Review approved',
-                approved_error: 'Error: Review not approved',
-                rejected_success: 'Review rejected',
-                rejected_error: 'Error: Review not rejected',
+                create_success: 'Customer have been created!',
+                create_error: ': Error %{error}',
+                update_success: 'Customer have been edited',
+                update_error: ': Error %{error}',
             },
         },
-        ra: {
-            navigation: {
-                skip_nav: 'what us?'
-            }
-        },
-        segments: {
-            name: 'Segment |||| Segments',
+        users: {
+            name: 'user |||| users',
+            title: 'users %{reference}',
             fields: {
-                customers: 'Customers',
+                name: 'username',
+                email: 'email',
+                password: 'password',
+                isAdmin: 'isAdmin?',
+                organizations: 'organizations',
+            },
+            details: 'Customer details'
+
+        },
+        programs: {
+            name: 'program |||| programs',
+            fields: {
+                ordinalNumber: 'Program number',
+                sum: 'sum',
+                startDate: 'Open date',
+                endDate: 'Close date',
+                numOfPayments: 'Number of payments',
+                launchDay: 'Launch day',
+                paymentMethod: {
+                    bankAccount: {
+                        bankId: 'Bank Id',
+                        branchId: 'Branch Id',
+                        accountNumber: 'Account number',
+                    }
+                },
+                organizationId: 'Organization',
+                projectId: 'Project',
+                customerId: 'Customer',
+                isActive: 'isActive'
+
+            },
+            titles: {
+                create: 'add a program',
+            },
+            filters: {
+                active: 'active',
+                cancel: 'cancel'
+            },
+            notifications: {
+                create_success: 'The program have been created',
+                edit_success: 'The program have been edited ',
+                save_error: 'Error!',
+                cancel_success: 'The programs have been canceld',
+                cancel_error: 'Error!\n Trt again!',
+                active_success: 'The programs have been activated',
+                active_error: 'Error!\n Trt again!',
+            },
+            action: {
+                active: 'active',
+                cancel: 'cancel',
+            },
+            fieldGroups: {
+                customer_details: 'Customer details',
+                collection_details: 'Collection details',
+                bank_account: 'Bank account',
+                credit_card: 'Credit card'
+            },
+        },
+        reports: {
+            name: 'Report |||| Reports',
+            fields: {
+                masav_report: 'Masav File',
                 name: 'Name',
             },
-            data: {
-                compulsive: 'Compulsive',
-                collector: 'Collector',
-                ordered_once: 'Ordered once',
-                regular: 'Regular',
-                returns: 'Returns',
-                reviewer: 'Reviewer',
+
+            titles: {
+                create: 'add',
+                edit: 'edit',
+                show: '*****',
+            },
+            notifications: {
+                create_success: 'The program have been created successfuly',
+                edit_success: 'The Program have been edited succsessfully',
+                save_error: 'Error!',
             },
         },
-    },
+        agreement: {
+            launchCollection: 'Launch Collection for date:',
+            notifications: {
+                collect_success: 'The collection launch successfully ',
+                collect_error: 'Error!',
+            },
+        }
+    }
 };
 
 export default customEnglishMessages;

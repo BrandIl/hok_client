@@ -68,14 +68,6 @@ const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
                 sidebarIsOpen={open}
                 dense={dense}
             />
-            <MenuItemLink
-                to={`/agreement`}
-                primaryText={translate('pos.menu.collection')}
-                leftIcon={<programs.icon />}
-                onClick={onMenuClick}
-                sidebarIsOpen={open}
-                dense={dense}
-            />
             {localStorage.getItem("permissions") === 'admin' &&
                 <MenuItemLink
                     to={`/agreement`}
@@ -84,7 +76,8 @@ const Menu: FC<MenuProps> = ({ onMenuClick, logout, dense = false }) => {
                     onClick={onMenuClick}
                     sidebarIsOpen={open}
                     dense={dense}
-                /> &&
+                />}
+            {localStorage.getItem("permissions") === 'admin' &&
                 <MenuItemLink
                     to={`/users`}
                     primaryText={translate('pos.menu.users')}

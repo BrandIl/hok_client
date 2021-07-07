@@ -1,8 +1,10 @@
+import { stringify } from "query-string";
 import simpleRestProvider from "ra-data-simple-rest";
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import {
   Admin,
   fetchUtils,
+  HttpError,
   Resource
 } from "react-admin";
 import authProvider from "./admin-props/authProvider";
@@ -19,15 +21,39 @@ import { customRoutes } from "./utils/routes";
 import themeReducer from "./utils/themeReducer";
 
 
-const fetchJson = (url: URL, options: any = {}) => {
+const fetchJson = async (url: any, options: any = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }
   // add your own headers here
   const token = localStorage.getItem("auth_token");
   options.headers.set("Authorization", `${token}`);
+  options.headers.set("Content-Type", `application/json; charset=utf-8`);
   //options.headers.set("Authorization", `${token}`);
-  return fetchUtils.fetchJson(url, options);
+
+  const response = await fetch(url, options)
+  const text = await response.text()
+  const o = {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+    body: text,
+  };
+  let status = o.status, statusText = o.statusText, headers = o.headers, body = o.body;
+  let json;
+  try {
+    json = JSON.parse(body);
+  } catch (e) {
+    // not json, no big deal
+  }
+  if (status < 200 || status >= 300) {
+    // eslint-disable-next-line no-mixed-operators
+    return Promise.reject(new HttpError((json && json.errors && json.errors[0].message) || statusText, status, json));
+  }
+  return Promise.resolve({ status: status, headers: headers, body: body, json: json });
+
+
+  // return fetchUtils.fetchJson(url, options);
 };
 export const dataProvider = simpleRestProvider("http://localhost:4000/api", fetchJson);
 const i18nProvider = polyglotI18nProvider(locale => {

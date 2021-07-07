@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import {
   BooleanInput,
   Create,
-  CreateProps, ReferenceArrayInput, SelectArrayInput, SimpleForm, TextInput
+  CreateProps, ReferenceArrayInput, SelectArrayInput, SimpleForm, TextInput, useNotify
 } from 'react-admin';
 import { validateEmail, validateNames } from '../utils/validations';
 import { UserCreateActions } from './UserCreateActions';
@@ -10,11 +10,14 @@ import { UserCreateActions } from './UserCreateActions';
 
 
 export const UserCreate: FC<CreateProps> = props => {
+  const notify = useNotify();
 
   return (
     <Create
       actions={<UserCreateActions />}
       {...props}
+    // onFailure={handleFailure}
+    // onSuccess={handleSuccess}
     >
       <SimpleForm>
 
